@@ -7,6 +7,10 @@
  */
 
 import React, {Component} from 'react';
+
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -26,15 +30,21 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import LogInView from './src/components/views/logIn_view';
+import RegisterView from './src/components/views/register_view';
+import HomeView from './src/components/views/home_view';
+
+const Stack = createStackNavigator();
 
 class App extends Component {
   render() {
     return (
-      <>
-        <View>
-          <LogInView />
-        </View>
-      </>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="LogIn" component={LogInView} />
+          <Stack.Screen name="Register" component={RegisterView} />
+          <Stack.Screen name="Home" component={HomeView} />
+        </Stack.Navigator>
+      </NavigationContainer>
     );
   }
 }

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
 
-export default class LogInView extends Component {
+export default class RegisterView extends Component {
   constructor(props) {
     super(props);
 
@@ -11,6 +11,7 @@ export default class LogInView extends Component {
       buttonStyle: '#c79274',
     };
   }
+
   handleEmailChange = (email) => {
     this.setState({email: email});
   };
@@ -19,25 +20,17 @@ export default class LogInView extends Component {
     this.setState({password: password});
   };
 
-  handleLogInButtonClick = () => {
+  handleRegisterButtonClick = () => {
     //do stuff
     //If Email !Empty || Password !Empty throw Error
-    //Attempt POST Login (/user/login)
-
-    //Placeholder
-    if(this.state.email != '' && this.state.password != '')
-        this.props.navigation.navigate('Home');
-    else
-        ToastAndroid.show('Unsuccessful, Email/Pass fields empty', ToastAndroid.SHORT);
-    //ToastAndroid.show('Not Implemented', ToastAndroid.SHORT);
+    //Attempt POST Register (/user/)
+    ToastAndroid.show('Not Implemented', ToastAndroid.SHORT);
   };
 
   render() {
-    const navigation = this.props.navigation;
-
     return (
       <View>
-        <Text>COVFEFE LOG-IN</Text>
+        <Text>COVFEFE REGISTER</Text>
 
         <TextInput
           placeholder="Enter Email"
@@ -53,16 +46,11 @@ export default class LogInView extends Component {
         />
 
         <Button
-          title="Log-In"
-          color={this.state.buttonStyle}
-          onPress={this.handleLogInButtonClick}>
-          Log-In
-        </Button>
-        <Button
-          color={this.state.buttonStyle}
           title="Register"
-          onPress={() => navigation.navigate('Register')}
-        />
+          color={this.state.buttonStyle}
+          onPress={this.handleRegisterButtonClick}>
+          Register
+        </Button>
       </View>
     );
   }
