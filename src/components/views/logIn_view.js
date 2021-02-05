@@ -1,6 +1,6 @@
 import React, {Component, useState} from 'react';
 import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
-import {AsyncStorage} from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class LogInView extends Component {
   constructor(props) {
@@ -10,6 +10,8 @@ export default class LogInView extends Component {
       user: {
         email: '',
         password: '',
+        id: null,
+        userToken: null
       },
       email: '',
       password: '',
@@ -48,9 +50,20 @@ export default class LogInView extends Component {
         let json = await response.json();
 
         console.log('json: ' + JSON.stringify(json));
+
+        console.log(this.state.user)
+
+        try{
+          await AsyncStorage.setItem("@userToken", json.token.toString());
+          console.log('UserToken saved: ' + json.token.toString())
+        } catch (e) {
+          throw new Error(e);
+        }
+        //this.props.navigation.navigate('Main');
       }
       else {
-        throw new Error(response.status)
+        ToastAndroid.show(response.status.toString(),ToastAndroid.SHORT);
+        throw new Error(response.status);
       }
 
     } catch (err) {
@@ -60,7 +73,15 @@ export default class LogInView extends Component {
 
   render() {
     const navigation = this.props.navigation;
+    const route = this.props.route;
 
+    //console.log(route);
+    /*if(route.params.user){
+      this.setState({
+        email: route.params.user.email,
+        password: route.params.user.password
+      })
+    }*/
     return (
       <View>
         <Text>COVFEFE LOG-IN</Text>
