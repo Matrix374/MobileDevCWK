@@ -3,7 +3,7 @@ import {View, Button, ToastAndroid} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Lib from '../logic/lib';
+import Lib from '../lib/lib';
 
 const common = new Lib();
 
