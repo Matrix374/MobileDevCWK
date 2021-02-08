@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import {View, FlatList, Text, Button} from 'react-native';
+import Lib from '../lib/lib';
 
 import LogOut from '../shared/logOut'
+
+const common = new Lib();
 
 export default class HomeView extends Component {
   constructor(props) {
@@ -36,10 +39,9 @@ export default class HomeView extends Component {
   };
 
   async componentDidMount() {
-    const route = this.props.route;
-    let userToken = route.params?.userToken
-
+    let userToken = await common.retrieveToken()
     await this.setState({userToken: userToken});
+    console.log('Home: ' + this.state.userToken);
 
     this.getData();
   }
@@ -56,8 +58,7 @@ export default class HomeView extends Component {
         <Text>Cleanliness Rating: {item.avg_clenliness_rating}</Text>
       </View>
     );
-
-    const navigation = this.props.navigation;
+    
     if (this.state.isLoading) {
       return (
         <View>
