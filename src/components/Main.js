@@ -13,16 +13,28 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import HomeView from './views/home_view';
 import UserView from './views/user_view';
+import Lib from './lib/lib';
 
 const Tab = createBottomTabNavigator();
 
+const common = new Lib();
+
 class Main extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      userToken: '',
+    };
+  }
+
+  async componentDidMount() {
+    let userToken = await common.retrieveToken();
+    await this.setState({userToken: userToken});
+    console.log('Main: ' + this.state.userToken);
+  }
   render() {
     return (
-      //Loads LogIn & Register Components (Splash.js?)
-      //On Success loads in Home which should have a different Navigator (MainApp.js)
-
-      //Read how to use multiple navigators
       <Tab.Navigator>
         <Tab.Screen name="Home" component={HomeView} />
         <Tab.Screen name="Person" component={UserView} />

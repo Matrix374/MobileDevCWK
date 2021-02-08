@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import LogInView from './views/logIn_view';
 import RegisterView from './views/register_view';
-import HomeView from './views/home_view';
+import Main from './Main'
 
 const Stack = createStackNavigator();
 
@@ -58,9 +58,8 @@ class Splash extends Component {
           {this.state.userToken ? (
             <>
               <Stack.Screen
-                name="Home"
-                component={HomeView}
-                initialParams={{userToken: this.state.userToken}}
+                name="Main"
+                component={Main}
               />
             </>
           ) : (
