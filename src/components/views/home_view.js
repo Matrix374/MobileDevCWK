@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, FlatList, Text, Button} from 'react-native';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import LogOut from '../shared/logOut'
 
 export default class HomeView extends Component {
   constructor(props) {
@@ -35,25 +35,10 @@ export default class HomeView extends Component {
     }
   };
 
-  handleLogOutButton = () => {
-    this.DeleteUserToken();
-
-    this.props.navigation.navigate('Splash')
-  };
-
-  DeleteUserToken = async () => {
-    try {
-      AsyncStorage.removeItem('@userToken');
-      console.log('Deletion Success');
-    } catch (e) {
-      throw new Error(e.toString());
-    }
-  };
-
   async componentDidMount() {
     const route = this.props.route;
     let userToken = route.params?.userToken
-    
+
     await this.setState({userToken: userToken});
 
     this.getData();
@@ -76,18 +61,15 @@ export default class HomeView extends Component {
     if (this.state.isLoading) {
       return (
         <View>
-          <Text>Loading</Text>
-          <Button title="Log Out" onPress={this.handleLogOutButton}>
-            Log Out
-          </Button>
+          <Text>Loading...</Text>
+          <LogOut/>
         </View>
+        
       );
     } else {
       return (
         <View>
-          <Button title="Log Out" onPress={this.handleLogOutButton}>
-            Log Out
-          </Button>
+          <LogOut/>
           <FlatList
             data={this.state.locations}
             renderItem={renderItem}
