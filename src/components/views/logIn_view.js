@@ -33,7 +33,12 @@ export default class LogInView extends Component {
       email: this.state.email,
       password: this.state.password,
     };
-    this.postLogIn();
+    
+    
+    let success = await this.postLogIn();
+
+    if(success)
+      this.props.navigation.navigate('Splash');
   };
 
   postLogIn = async () => {
@@ -59,13 +64,12 @@ export default class LogInView extends Component {
         } catch (e) {
           throw new Error(e);
         }
-        //this.props.navigation.navigate('Main');
+        return true;
       }
       else {
         ToastAndroid.show(response.status.toString(),ToastAndroid.SHORT);
         throw new Error(response.status);
       }
-
     } catch (err) {
       console.log(err);
     }

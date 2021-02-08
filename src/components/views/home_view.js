@@ -1,23 +1,26 @@
 import React, {Component} from 'react';
-import {View, FlatList, Text} from 'react-native';
+import {View, FlatList, Text, Button} from 'react-native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class HomeView extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      userToken: '',
       isLoading: true,
       locations: [],
     };
   }
 
-  getData = async () => {
+  getData = async (userToken) => {
     try {
       let response = await fetch('http://10.0.2.2:3333/api/1.0.0/find', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'X-Authorization': 'a16054733fd01a2c98d939ee4981b7df',
+          'X-Authorization': userToken,
         },
       });
 
@@ -32,17 +35,35 @@ export default class HomeView extends Component {
     }
   };
 
-  componentDidMount() {
-    this.getData();
+  handleLogOutButton = () => {
+    this.DeleteUserToken();
+
+    this.props.navigation.navigate('Splash')
+  };
+
+  DeleteUserToken = async () => {
+    try {
+      AsyncStorage.removeItem('@userToken');
+      console.log('Deletion Success');
+    } catch (e) {
+      throw new Error(e.toString());
+    }
+  };
+
+  async componentDidMount() {
+    console.log('pre-state: ' + this.state.userToken);
+
+    const route = this.props.route;
+
+    console.log('params: ' + route.params?.userToken);
+
+    this.setState({userToken: route.params?.userToken});
+
+    this.getData(route.params?.userToken);
   }
 
-  /*componentWillUnmount() {
-      this.setState({
-          isLoading: false,
-          locations: this.state.locations
-      })
-  }*/
   render() {
+    
     const renderItem = ({item}) => (
       <View>
         <Text>{item.location_name}</Text>
@@ -59,11 +80,17 @@ export default class HomeView extends Component {
       return (
         <View>
           <Text>Loading</Text>
+          <Button title="Log Out" onPress={this.handleLogOutButton}>
+            Log Out
+          </Button>
         </View>
       );
     } else {
       return (
         <View>
+          <Button title="Log Out" onPress={this.handleLogOutButton}>
+            Log Out
+          </Button>
           <FlatList
             data={this.state.locations}
             renderItem={renderItem}
