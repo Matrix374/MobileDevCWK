@@ -14,13 +14,13 @@ export default class HomeView extends Component {
     };
   }
 
-  getData = async (userToken) => {
+  getData = async () => {
     try {
       let response = await fetch('http://10.0.2.2:3333/api/1.0.0/find', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'X-Authorization': userToken,
+          'X-Authorization': this.state.userToken,
         },
       });
 
@@ -51,15 +51,12 @@ export default class HomeView extends Component {
   };
 
   async componentDidMount() {
-    console.log('pre-state: ' + this.state.userToken);
-
     const route = this.props.route;
+    let userToken = route.params?.userToken
+    
+    await this.setState({userToken: userToken});
 
-    console.log('params: ' + route.params?.userToken);
-
-    this.setState({userToken: route.params?.userToken});
-
-    this.getData(route.params?.userToken);
+    this.getData();
   }
 
   render() {
