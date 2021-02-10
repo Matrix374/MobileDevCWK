@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, FlatList, Text, Button} from 'react-native';
 import Lib from '../lib/lib';
 
+import Loading from '../shared/loading';
 import LogOut from '../shared/logOut'
 
 const common = new Lib();
@@ -58,11 +59,11 @@ export default class HomeView extends Component {
         <Text>Cleanliness Rating: {item.avg_clenliness_rating}</Text>
       </View>
     );
-    
+
     if (this.state.isLoading) {
       return (
         <View>
-          <Text>Loading...</Text>
+          <Loading/>
           <LogOut/>
         </View>
         
