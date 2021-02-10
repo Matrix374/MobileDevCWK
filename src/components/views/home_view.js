@@ -3,6 +3,7 @@ import {View, FlatList, Text, Button} from 'react-native';
 import Lib from '../lib/lib';
 
 import Loading from '../shared/loading';
+import Location from '../shared/location';
 import LogOut from '../shared/logOut'
 
 const common = new Lib();
@@ -51,12 +52,8 @@ export default class HomeView extends Component {
     
     const renderItem = ({item}) => (
       <View>
-        <Text>{item.location_name}</Text>
-        <Text>Location: {item.location_town}</Text>
-        <Text>Overall Rating: {item.avg_overall_rating}</Text>
-        <Text>Price Rating: {item.avg_price_rating}</Text>
-        <Text>Quality Rating: {item.avg_quality_rating}</Text>
-        <Text>Cleanliness Rating: {item.avg_clenliness_rating}</Text>
+        <Location location={item}/>
+        <Button title='Details' onPress={this.handleItemPress(item.location_id)}></Button>
       </View>
     );
 
