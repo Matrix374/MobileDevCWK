@@ -8,7 +8,7 @@ import LogOut from '../shared/logOut';
 
 const common = new Lib();
 
-export default class HomeView extends Component {
+export default class LocationsView extends Component {
   constructor(props) {
     super(props);
 
@@ -17,6 +17,11 @@ export default class HomeView extends Component {
       isLoading: true,
       locations: [],
     };
+  }
+
+  handleLocationButton = (id) => {
+    console.log('Go to Location ' + id)
+    this.props.navigation.navigate('Location', {location_id: id})
   }
 
   getData = async () => {
@@ -35,8 +40,8 @@ export default class HomeView extends Component {
         isLoading: false,
         locations: json,
       });
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      throw new Error(e);
     }
   };
 
@@ -54,7 +59,7 @@ export default class HomeView extends Component {
         <Location location={item} />
         <Button
           title="Details"
-          onPress={this.props.navigation.navigate('Location', {location_id: item.location_id})}></Button>
+          onPress={this.handleLocationButton(item.location_id)}></Button>
       </View>
     );
 
