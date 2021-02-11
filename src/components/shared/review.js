@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text} from 'react-native';
 
 export default class Review extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ export default class Review extends Component {
   render() {
 
     return (
-      <View style={styles.container}>
+      <View>
         <Text>Review Id: {this.state.review.review_id}</Text>
         <Text>Overall Rating: {this.state.review.overall_rating}</Text>
         <Text>Price Rating: {this.state.review.price_rating}</Text>
@@ -39,17 +39,3 @@ export default class Review extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: "space-between",
-      backgroundColor: "#fff",
-      padding: 20,
-      margin: 10,
-    },
-    box: {
-      flex: 0.3,
-      backgroundColor: "grey",
-      borderWidth: 5,
-    }
-  });

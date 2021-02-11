@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, Button, ToastAndroid} from 'react-native';
+import { Styles } from '../../styles/mainStyle';
 
 import Lib from '../lib/lib';
 import Loading from '../shared/loading';
@@ -18,6 +19,10 @@ export default class LocationDetail extends Component {
       isLoading: true,
       location: [],
     };
+  }
+
+  handleReviewButton = async () => {
+    console.log('Leave Review Pressed');
   }
 
   getData = async () => {
@@ -59,7 +64,7 @@ export default class LocationDetail extends Component {
   render() {
 
     const renderItem = ({item}) => (
-      <View>
+      <View style={Styles.container}>
         <Review review={item}/>
       </View>
     );
@@ -75,6 +80,9 @@ export default class LocationDetail extends Component {
         <View>
           <Text>Location ID: {this.state.location_id}</Text>
           <Location location={this.state.location} />
+          <Button title="Leave a Review" onPress={this.handleReviewButton}>
+          Leave a Review
+        </Button>
           <FlatList
             data={this.state.location.location_reviews}
             renderItem={renderItem}
