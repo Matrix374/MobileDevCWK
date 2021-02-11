@@ -59,12 +59,12 @@ export default class LogInView extends Component {
         console.log(this.state.user)
 
         try{
-          await AsyncStorage.setItem("@userToken", json.token.toString());
-          console.log('UserToken saved: ' + json.token.toString())
+          await AsyncStorage.setItem("@user", JSON.stringify(json));
+          console.log('user saved: ' + JSON.stringify(json))
+          return true;
         } catch (e) {
           throw new Error(e);
         }
-        return true;
       }
       else {
         ToastAndroid.show(response.status.toString(),ToastAndroid.SHORT);

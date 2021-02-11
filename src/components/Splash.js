@@ -13,9 +13,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import LogInView from './views/logIn_view';
 import RegisterView from './views/register_view';
-import Main from './Main'
+import Main from './Main';
+import LocationDetail from './views/location_detail_view';
+import Lib from './lib/lib';
 
 const Stack = createStackNavigator();
+
+const common = new Lib();
 
 class Splash extends Component {
   constructor(props) {
@@ -28,19 +32,8 @@ class Splash extends Component {
     };
   }
 
-  retrieveToken = async () => {
-    try {
-      let userToken = await AsyncStorage.getItem('@userToken');
-
-      console.log('token retrieved: ' + userToken);
-      return userToken;
-    } catch (e) {
-      console.log(e.toString());
-    }
-  };
-
   async componentDidMount() {
-    let userToken = await this.retrieveToken();
+    let userToken = await common.retrieveToken();
 
     this.setState({userToken: userToken, isLoading: false});
   }
@@ -57,10 +50,8 @@ class Splash extends Component {
         <Stack.Navigator>
           {this.state.userToken ? (
             <>
-              <Stack.Screen
-                name="Main"
-                component={Main}
-              />
+              <Stack.Screen name="Main" component={Main} />
+              <Stack.Screen name="Location" component={LocationDetail} />
             </>
           ) : (
             <>

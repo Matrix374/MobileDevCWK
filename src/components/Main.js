@@ -17,27 +17,20 @@ import Lib from './lib/lib';
 
 const Tab = createBottomTabNavigator();
 
-const common = new Lib();
-
 class Main extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      userToken: '',
+      id: '',
     };
   }
 
-  async componentDidMount() {
-    let userToken = await common.retrieveToken();
-    await this.setState({userToken: userToken});
-    console.log('Main: ' + this.state.userToken);
-  }
   render() {
     return (
       <Tab.Navigator>
         <Tab.Screen name="Home" component={HomeView} />
-        <Tab.Screen name="Person" component={UserView} />
+        <Tab.Screen name="Person" component={UserView}/>
       </Tab.Navigator>
     );
   }

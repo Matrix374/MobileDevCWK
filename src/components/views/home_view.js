@@ -4,7 +4,7 @@ import Lib from '../lib/lib';
 
 import Loading from '../shared/loading';
 import Location from '../shared/location';
-import LogOut from '../shared/logOut'
+import LogOut from '../shared/logOut';
 
 const common = new Lib();
 
@@ -41,7 +41,7 @@ export default class HomeView extends Component {
   };
 
   async componentDidMount() {
-    let userToken = await common.retrieveToken()
+    let userToken = await common.retrieveToken();
     await this.setState({userToken: userToken});
     console.log('Home: ' + this.state.userToken);
 
@@ -49,26 +49,26 @@ export default class HomeView extends Component {
   }
 
   render() {
-    
     const renderItem = ({item}) => (
       <View>
-        <Location location={item}/>
-        <Button title='Details' onPress={this.handleItemPress(item.location_id)}></Button>
+        <Location location={item} />
+        <Button
+          title="Details"
+          onPress={this.props.navigation.navigate('Location', {location_id: item.location_id})}></Button>
       </View>
     );
 
     if (this.state.isLoading) {
       return (
         <View>
-          <Loading/>
-          <LogOut/>
+          <Loading />
+          <LogOut />
         </View>
-        
       );
     } else {
       return (
         <View>
-          <LogOut/>
+          <LogOut />
           <FlatList
             data={this.state.locations}
             renderItem={renderItem}
