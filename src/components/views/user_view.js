@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList, Button, ToastAndroid} from 'react-native';
+import {View, Text, FlatList, Button, Alert} from 'react-native';
 import Lib from '../lib/lib';
 import Loading from '../shared/loading';
 import Review from '../shared/review';
@@ -57,7 +57,14 @@ export default class UserView extends Component {
     let userToken = await common.retrieveToken();
     console.log('USER: ' + id + ', ' + userToken);
     await this.setState({id: id, userToken: userToken});
-    await this.getUser();
+
+    this._unsubscribe = this.props.navigation.addListener('focus', async () => {
+      await this.getUser();
+    });
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
   }
 
   render() {
