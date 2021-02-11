@@ -7,7 +7,7 @@ import { Styles } from '../../styles/mainStyle'
 
 const common = new Lib();
 
-export default class HomeView extends Component {
+export default class UserView extends Component {
   constructor(props) {
     super(props);
 
