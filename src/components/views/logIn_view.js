@@ -56,22 +56,20 @@ export default class LogInView extends Component {
 
         console.log('json: ' + JSON.stringify(json));
 
-        console.log(this.state.user)
-
-        try{
-          await AsyncStorage.setItem("@user", JSON.stringify(json));
-          console.log('user saved: ' + JSON.stringify(json))
+        try {
+          await AsyncStorage.setItem('@user', JSON.stringify(json));
+          console.log('user saved: ' + JSON.stringify(json));
+          console.log('logged in');
           return true;
         } catch (e) {
           throw new Error(e);
         }
-      }
-      else {
-        ToastAndroid.show(response.status.toString(),ToastAndroid.SHORT);
+      } else {
+        ToastAndroid.show(response.status.toString(), ToastAndroid.SHORT);
         throw new Error(response.status);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      console.log(e);
     }
   };
 

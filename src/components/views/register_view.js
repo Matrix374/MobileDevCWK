@@ -36,14 +36,15 @@ export default class RegisterView extends Component {
     this.setState({password: password});
   };
 
-  handleRegisterButtonClick = () => {
+  handleRegisterButtonClick = async () => {
     this.state.user = {
       first_name: this.state.firstName,
       last_name: this.state.lastName,
       email: this.state.email,
       password: this.state.password,
     };
-    this.postRegister();
+    
+    await this.postRegister();
 
     if(this.state.success)
     {
@@ -71,8 +72,8 @@ export default class RegisterView extends Component {
         ToastAndroid.show(response.status.toString(), ToastAndroid.SHORT);
         throw new Error(response.status);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      console.log(e);
     }
   };
 
