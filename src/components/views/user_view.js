@@ -3,7 +3,7 @@ import {View, Text, FlatList, Button, ToastAndroid} from 'react-native';
 import Lib from '../lib/lib';
 import Loading from '../shared/loading';
 import Review from '../shared/review';
-import { Styles } from '../../styles/mainStyle'
+import {Styles} from '../../styles/mainStyle';
 
 const common = new Lib();
 
@@ -18,6 +18,13 @@ export default class UserView extends Component {
       user: [],
     };
   }
+
+  handleUpdateButton = async () => {
+    console.log('Update User Pressed');
+    this.props.navigation.navigate('UserScreen', {
+      screen: 'UserUpdate',
+    });
+  };
 
   getUser = async () => {
     try {
@@ -70,14 +77,16 @@ export default class UserView extends Component {
     } else {
       return (
         <View>
+          <Button
+            title="Update User Information"
+            onPress={this.handleUpdateButton}>
+            Update User Information
+          </Button>
           <Text>User Id: {this.state.user.user_id}</Text>
           <Text>First Name: {this.state.user.first_name}</Text>
           <Text>Last Name: {this.state.user.last_name}</Text>
           <Text>E-Mail: {this.state.user.email}</Text>
-          <FlatList
-            data={this.state.user.reviews}
-            renderItem={renderItem}
-          />
+          <FlatList data={this.state.user.reviews} renderItem={renderItem} />
         </View>
       );
     }
