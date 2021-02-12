@@ -40,14 +40,21 @@ export default class UserView extends Component {
         },
       );
 
-      let json = await response.json();
+      if (response.ok) {
+        let json = await response.json();
 
-      console.log(JSON.stringify(json.reviews[0].review));
+        console.log(JSON.stringify(json.reviews[0].review));
 
-      this.setState({
-        isLoading: false,
-        user: json,
-      });
+        this.setState({
+          isLoading: false,
+          user: json,
+        });
+      } else {
+        console.log(response.status);
+        this.setState({
+          isLoading: false,
+        });
+      }
     } catch (e) {
       throw new Error(e);
     }
@@ -58,7 +65,8 @@ export default class UserView extends Component {
     let userToken = await common.retrieveToken();
     console.log('USER: ' + id + ', ' + userToken);
     await this.setState({id: id, userToken: userToken});
-
+    
+    await this.getUser();
     this._unsubscribe = this.props.navigation.addListener('focus', async () => {
       await this.getUser();
     });
