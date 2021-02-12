@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, FlatList, Text, Button} from 'react-native';
 import Lib from '../lib/lib';
+import {Styles} from '../../styles/mainStyle';
 
 import Loading from '../shared/loading';
 import Location from '../shared/location';
@@ -55,7 +56,7 @@ export default class LocationsView extends Component {
 
   render() {
     const renderItem = ({item}) => (
-      <View>
+      <View style={Styles.container}>
         <Location location={item} />
         <Button
           title="Details"
