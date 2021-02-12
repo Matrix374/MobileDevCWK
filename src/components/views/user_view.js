@@ -28,6 +28,7 @@ export default class UserView extends Component {
 
   getUser = async () => {
     try {
+      console.log('Getting User');
       let response = await fetch(
         'http://10.0.2.2:3333/api/1.0.0/user/' + this.state.id,
         {

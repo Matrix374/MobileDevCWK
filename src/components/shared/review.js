@@ -12,7 +12,7 @@ export default class Review extends Component {
 
   getReview = async () => {
     try {
-      console.log('trying');
+      console.log('trying to retrieve reviews');
       let review = this.props.review;
       await this.setState({review: review});
     } catch (e) {
