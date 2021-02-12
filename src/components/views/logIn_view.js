@@ -20,6 +20,14 @@ export default class LogInView extends Component {
     };
   }
 
+  checkLoggedIn = async () => {
+    console.log('logged in');
+    this.props.navigation.reset({
+      index: 0,
+      routes: [{name: 'SplashScreen'}],
+    });
+  };
+
   handleEmailChange = (email) => {
     this.setState({email: email});
   };
@@ -37,8 +45,10 @@ export default class LogInView extends Component {
     
     let success = await this.postLogIn();
 
-    if(success)
-      this.props.navigation.navigate('Splash');
+    if (success) {
+      console.log('beep');
+      this.checkLoggedIn();
+    }
   };
 
   postLogIn = async () => {
@@ -72,6 +82,16 @@ export default class LogInView extends Component {
       console.log(e);
     }
   };
+
+  async componentDidMount() {
+    this._unsubscribe = this.props.navigation.addListener('focus', async () => {
+      this.checkLoggedIn();
+    });
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
 
   render() {
     const navigation = this.props.navigation;
