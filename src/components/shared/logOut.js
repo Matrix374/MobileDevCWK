@@ -18,10 +18,7 @@ export default class LogOut extends Component {
   handleLogOutButton = async () => {
     if (await this.postLogOut()) await common.DeleteUser();
 
-    this.props.navigation.reset({
-      index: 0,
-      routes: [{name: 'SplashScreen'}],
-    });
+    common.checkLoggedIn();
   };
 
   postLogOut = async () => {

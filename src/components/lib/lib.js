@@ -36,4 +36,12 @@ export default class Lib {
       throw new Error('User Data Deletion Error: ' + e);
     }
   };
+
+  checkLoggedIn = async () => {
+    console.log('logged in');
+    this.props.navigation.reset({
+      index: 0,
+      routes: [{name: 'SplashScreen'}],
+    });
+  };
 }

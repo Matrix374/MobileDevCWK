@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Lib from '../lib/lib';
+
+const common = new Lib();
+
 
 export default class LogInView extends Component {
   constructor(props) {
@@ -20,14 +24,6 @@ export default class LogInView extends Component {
     };
   }
 
-  checkLoggedIn = async () => {
-    console.log('logged in');
-    this.props.navigation.reset({
-      index: 0,
-      routes: [{name: 'SplashScreen'}],
-    });
-  };
-
   handleEmailChange = (email) => {
     this.setState({email: email});
   };
@@ -46,8 +42,8 @@ export default class LogInView extends Component {
     let success = await this.postLogIn();
 
     if (success) {
-      console.log('beep');
-      this.checkLoggedIn();
+      console.log('Log In Success');
+      common.checkLoggedIn();
     }
   };
 
