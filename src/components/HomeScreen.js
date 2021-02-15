@@ -17,7 +17,7 @@ export default class Home extends Component {
     return (
       <Stack.Navigator>
         <Stack.Screen name="Locations" component={LocationsView} />
-        <Stack.Screen name="Location" component={LocationDetail} />
+        <Stack.Screen name="LocationDetail" component={LocationDetail} />
       </Stack.Navigator>
     );
   }
