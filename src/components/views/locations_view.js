@@ -22,7 +22,7 @@ export default class LocationsView extends Component {
 
   handleLocationButton = (id) => {
     console.log('Go to Location ' + id)
-    this.props.navigation.navigate('Location', {location_id: id})
+    this.props.navigation.navigate('LocationDetail', {location_id: id})
   }
 
   getData = async () => {
@@ -59,8 +59,9 @@ export default class LocationsView extends Component {
       <View style={Styles.container}>
         <Location location={item} />
         <Button
+          style={Styles.button}
           title="Details"
-          onPress={this.handleLocationButton(item.location_id)}></Button>
+          onPress={() => {this.handleLocationButton(item.location_id)}}></Button>
       </View>
     );
 
