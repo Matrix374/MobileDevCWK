@@ -1,6 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Lib {
+
+  retrieveFavourites = async () => {
+    try {
+      let json = await AsyncStorage.getItem('@user_favourites');
+      console.log('from lib, favourites retrieved: ' + JSON.stringify(json));
+      return JSON.parse(json);
+    } catch (e) {
+      throw new Error('Favourite Retrieval Error: ' + e);
+    }
+  };
   retrieveToken = async () => {
     try {
       let json = await AsyncStorage.getItem('@user');

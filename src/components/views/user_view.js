@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, Button, Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Lib from '../lib/lib';
 import Loading from '../shared/loading';
 import Review from '../shared/review';
@@ -45,6 +46,7 @@ export default class UserView extends Component {
 
         console.log(JSON.stringify(json.reviews[0].review));
 
+        this.saveFavourites(json.favourite_locations);
         this.setState({
           isLoading: false,
           user: json,
@@ -60,12 +62,27 @@ export default class UserView extends Component {
     }
   };
 
+  saveFavourites = async (fav_locations) => {
+    let fav_ids = [];
+
+    fav_locations.forEach((fav) => {
+      fav_ids.push(fav.location_id);
+    });
+
+    try {
+      await AsyncStorage.setItem('@user_favourites', JSON.stringify(fav_ids));
+      console.log('Saved ' + JSON.stringify(fav_ids));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   async componentDidMount() {
     let id = await common.retrieveUserId();
     let userToken = await common.retrieveToken();
     console.log('USER: ' + id + ', ' + userToken);
     await this.setState({id: id, userToken: userToken});
-    
+
     await this.getUser();
     this._unsubscribe = this.props.navigation.addListener('focus', async () => {
       await this.getUser();
@@ -102,7 +119,11 @@ export default class UserView extends Component {
           <Text>First Name: {this.state.user.first_name}</Text>
           <Text>Last Name: {this.state.user.last_name}</Text>
           <Text>E-Mail: {this.state.user.email}</Text>
-          <FlatList data={this.state.user.reviews} renderItem={renderItem} />
+          <FlatList
+            data={this.state.user.reviews}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.review.review_id}
+          />
         </View>
       );
     }

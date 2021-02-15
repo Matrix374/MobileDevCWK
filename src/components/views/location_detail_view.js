@@ -15,6 +15,7 @@ export default class LocationDetail extends Component {
 
     this.state = {
       userToken: '',
+      favourite: false,
       location_id: null,
       isLoading: true,
       location: [],
@@ -45,14 +46,72 @@ export default class LocationDetail extends Component {
         location: json,
       });
     } catch (e) {
-      throw new Error("Location Detail: " + e);
+      throw new Error('Location Detail: ' + e);
+    }
+  };
+
+  handleFavouriteButton = async () => {
+    console.log('Favourite Pressed');
+
+    if (this.state.favourite) {
+      this.deleteFavourite();
+    } else {
+      this.postFavourite();
+    }
+  };
+
+  postFavourite = async () => {
+    try {
+      let response = await fetch(
+        'http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id.toString() +
+          '/favourite',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': this.state.userToken,
+          },
+        },
+      );
+
+      if (response.ok) {
+        console.log('Favourited');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  deleteFavourite = async () => {
+    try {
+      let response = await fetch(
+        'http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/favourite',
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': this.state.userToken,
+          },
+        },
+      );
+
+      if (response.ok) {
+        console.log('Un-Favourited');
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
   async componentDidMount() {
     let location_id = this.props.route.params?.location_id;
-    await this.setState({location_id: location_id});
+    let favourite = this.props.route.params?.favourite;
+    await this.setState({location_id: location_id, favourite: favourite});
     console.log('Location Id: ' + this.state.location_id);
+    console.log('Favourite: ' + this.state.favourite);
 
     let userToken = await common.retrieveToken();
     await this.setState({userToken: userToken});
@@ -82,6 +141,9 @@ export default class LocationDetail extends Component {
           <Button title="Leave a Review" onPress={this.handleReviewButton}>
             Leave a Review
           </Button>
+          <Button
+            title={this.state.favourite ? 'Un-Favourite' : 'Favourite'}
+            onPress={this.handleFavouriteButton}></Button>
           <FlatList
             data={this.state.location.location_reviews}
             renderItem={renderItem}

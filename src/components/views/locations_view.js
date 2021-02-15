@@ -15,14 +15,15 @@ export default class LocationsView extends Component {
 
     this.state = {
       userToken: '',
+      favourites: [],
       isLoading: true,
       locations: [],
     };
   }
 
-  handleLocationButton = (id) => {
+  handleLocationButton = (id, favourite) => {
     console.log('Go to Location ' + id)
-    this.props.navigation.navigate('LocationDetail', {location_id: id})
+    this.props.navigation.navigate('LocationDetail', {location_id: id, favourite: favourite})
   }
 
   getData = async () => {
@@ -48,8 +49,10 @@ export default class LocationsView extends Component {
 
   async componentDidMount() {
     let userToken = await common.retrieveToken();
-    await this.setState({userToken: userToken});
+    let favourites = await common.retrieveFavourites();
+    await this.setState({userToken: userToken, favourites: favourites});
     console.log('Home: ' + this.state.userToken);
+    console.log('Home Favourites: ' + this.state.favourites);
 
     this.getData();
   }
@@ -57,11 +60,11 @@ export default class LocationsView extends Component {
   render() {
     const renderItem = ({item}) => (
       <View style={Styles.container}>
-        <Location location={item} />
+        <Location location={item} favourite={this.state.favourites.includes(item.location_id)}/>
         <Button
           style={Styles.button}
           title="Details"
-          onPress={() => {this.handleLocationButton(item.location_id)}}></Button>
+          onPress={() => {this.handleLocationButton(item.location_id, this.state.favourites.includes(item.location_id))}}></Button>
       </View>
     );
 

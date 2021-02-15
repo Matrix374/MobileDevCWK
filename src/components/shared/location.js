@@ -7,13 +7,15 @@ export default class Location extends Component {
 
     this.state = {
       location: [],
+      favourite: false
     };
   }
 
   getLocation = async () => {
     try {
       let location = this.props.location;
-      await this.setState({location: location});
+      let favourite = this.props.favourite;
+      await this.setState({location: location, favourite: favourite});
     } catch (e) {
       throw new Error(e);
     }
@@ -27,7 +29,7 @@ export default class Location extends Component {
 
     return (
       <View>
-        <Text>{this.state.location.location_name}</Text>
+        <Text>{this.state.location.location_name} {this.state.favourite ? '*' : ''}</Text>
         <Text>Location: {this.state.location.location_town}</Text>
         <Text>Overall Rating: {this.state.location.avg_overall_rating}</Text>
         <Text>Price Rating: {this.state.location.avg_price_rating}</Text>
