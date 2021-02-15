@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {View, Button, ToastAndroid} from 'react-native';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {View, Button} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import Lib from '../lib/lib';
 
@@ -15,12 +14,14 @@ export default class LogOut extends Component {
       userToken: '',
     };
   }
-  
-  handleLogOutButton = async () => {
 
-    if(await this.postLogOut())
-        await common.DeleteUser();
-    this.props.navigation.navigate('Splash');
+  handleLogOutButton = async () => {
+    if (await this.postLogOut()) await common.DeleteUser();
+
+    this.props.navigation.reset({
+      index: 0,
+      routes: [{name: 'SplashScreen'}],
+    });
   };
 
   postLogOut = async () => {
@@ -34,19 +35,18 @@ export default class LogOut extends Component {
       });
 
       if (response.ok) {
-          console.log('Logged Out');
+        console.log('Logged Out');
         return true;
       } else {
-        ToastAndroid.show(response.status.toString(), ToastAndroid.SHORT);
         throw new Error(response.status);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      console.log(e);
     }
   };
 
   async componentDidMount() {
-    let userToken = await common.retrieveToken()
+    let userToken = await common.retrieveToken();
     await this.setState({userToken: userToken});
     console.log('LogOut: ' + this.state.userToken);
   }

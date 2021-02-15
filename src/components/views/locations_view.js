@@ -74,7 +74,7 @@ export default class LocationsView extends Component {
     } else {
       return (
         <View>
-          <LogOut />
+          <LogOut navigation={this.props.navigation}/>
           <FlatList
             data={this.state.locations}
             renderItem={renderItem}
