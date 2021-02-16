@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import {View, Button} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import StorageService from '../lib/storage_service';
 import Lib from '../lib/lib';
 
-const common = new Lib();
+const _storageService = new StorageService();
+const _lib = new Lib();
 
 export default class LogOut extends Component {
   constructor(props) {
@@ -16,9 +18,9 @@ export default class LogOut extends Component {
   }
 
   handleLogOutButton = async () => {
-    if (await this.postLogOut()) await common.DeleteUser();
+    if (await this.postLogOut()) await _storageService.DeleteUser();
 
-    common.checkLoggedIn();
+    _lib.checkLoggedIn();
   };
 
   postLogOut = async () => {
@@ -43,7 +45,7 @@ export default class LogOut extends Component {
   };
 
   async componentDidMount() {
-    let userToken = await common.retrieveToken();
+    let userToken = await _storageService.retrieveToken();
     await this.setState({userToken: userToken});
     console.log('LogOut: ' + this.state.userToken);
   }

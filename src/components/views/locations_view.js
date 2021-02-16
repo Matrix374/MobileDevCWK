@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {View, FlatList, Text, Button} from 'react-native';
-import Lib from '../lib/lib';
+import StorageService from '../lib/storage_service';
 import {Styles} from '../../styles/mainStyle';
 
 import Loading from '../shared/loading';
 import Location from '../shared/location';
 import LogOut from '../shared/logOut';
 
-const common = new Lib();
+const _storageService = new StorageService();
 
 export default class LocationsView extends Component {
   constructor(props) {
@@ -48,8 +48,8 @@ export default class LocationsView extends Component {
   };
 
   async componentDidMount() {
-    let userToken = await common.retrieveToken();
-    let favourites = await common.retrieveFavourites();
+    let userToken = await _storageService.retrieveToken();
+    let favourites = await _storageService.retrieveFavourites();
     await this.setState({userToken: userToken, favourites: favourites});
     console.log('Home: ' + this.state.userToken);
     console.log('Home Favourites: ' + this.state.favourites);

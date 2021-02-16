@@ -3,7 +3,7 @@ import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Lib from '../lib/lib';
 
-const common = new Lib();
+const _lib = new Lib();
 
 
 export default class LogInView extends Component {
@@ -43,7 +43,7 @@ export default class LogInView extends Component {
 
     if (success) {
       console.log('Log In Success');
-      common.checkLoggedIn();
+      _lib.checkLoggedIn();
     }
   };
 
@@ -81,7 +81,7 @@ export default class LogInView extends Component {
 
   async componentDidMount() {
     this._unsubscribe = this.props.navigation.addListener('focus', async () => {
-      this.checkLoggedIn();
+      _lib.checkLoggedIn();
     });
   }
 

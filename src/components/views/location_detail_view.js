@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import {View, Text, FlatList, Button, ToastAndroid} from 'react-native';
 import {Styles} from '../../styles/mainStyle';
 
-import Lib from '../lib/lib';
+import StorageService from '../lib/storage_service';
 import Loading from '../shared/loading';
 import Location from '../shared/location';
 import Review from '../shared/review';
 
-const common = new Lib();
+const _storageService = new StorageService();
 
 export default class LocationDetail extends Component {
   constructor(props) {
@@ -113,7 +113,7 @@ export default class LocationDetail extends Component {
     console.log('Location Id: ' + this.state.location_id);
     console.log('Favourite: ' + this.state.favourite);
 
-    let userToken = await common.retrieveToken();
+    let userToken = await _storageService.retrieveToken();
     await this.setState({userToken: userToken});
     console.log('LocationDetail: ' + this.state.userToken);
 

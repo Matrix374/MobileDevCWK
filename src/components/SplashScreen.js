@@ -5,12 +5,12 @@ import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 
 import MainScreen from './MainScreen';
-import Lib from './lib/lib';
+import StorageService from './lib/storage_service';
 import AuthFlowScreen from './AuthFlowScreen';
 
 const Stack = createStackNavigator();
 
-const common = new Lib();
+const _storageService = new StorageService();
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ export default class SplashScreen extends Component {
   async componentDidMount() {
     let userToken = '';
     this._unsubscribe = this.props.navigation.addListener('focus', async () => {
-      userToken = await common.retrieveToken();
+      userToken = await _storageService.retrieveToken();
       this.setState({userToken: userToken, isLoading: false});
     });
   }

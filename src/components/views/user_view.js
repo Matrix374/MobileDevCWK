@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, Button, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Lib from '../lib/lib';
+import StorageService from '../lib/lib';
 import Loading from '../shared/loading';
 import Review from '../shared/review';
 import {Styles} from '../../styles/mainStyle';
 
-const common = new Lib();
+const _storageService = new StorageService();
 
 export default class UserView extends Component {
   constructor(props) {
@@ -78,8 +78,8 @@ export default class UserView extends Component {
   };
 
   async componentDidMount() {
-    let id = await common.retrieveUserId();
-    let userToken = await common.retrieveToken();
+    let id = await _storageService.retrieveUserId();
+    let userToken = await _storageService.retrieveToken();
     console.log('USER: ' + id + ', ' + userToken);
     await this.setState({id: id, userToken: userToken});
 

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
-import Lib from '../lib/lib';
+import StorageService from '../lib/storage_service';
 
-const common = new Lib();
+const _storageService = new StorageService();
 
 export default class UserUpdateView extends Component {
   constructor(props) {
@@ -87,8 +87,8 @@ export default class UserUpdateView extends Component {
   };
 
   async componentDidMount() {
-    let id = await common.retrieveUserId();
-    let userToken = await common.retrieveToken();
+    let id = await _storageService.retrieveUserId();
+    let userToken = await _storageService.retrieveToken();
     console.log('USER UPDATE: ' + id + ', ' + userToken);
     await this.setState({id: id, userToken: userToken});
   }
