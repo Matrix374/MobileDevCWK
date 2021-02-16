@@ -24,6 +24,7 @@ export default class LocationDetail extends Component {
 
   handleReviewButton = async () => {
     console.log('Leave Review Pressed');
+    this.props.navigation.navigate('ReviewCreate', {location_id: this.state.location_id, review_id: null})
   };
 
   getData = async () => {
