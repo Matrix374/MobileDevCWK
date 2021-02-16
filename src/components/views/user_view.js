@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, Button, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import StorageService from '../lib/lib';
+import StorageService from '../lib/storage_service';
 import Loading from '../shared/loading';
 import Review from '../shared/review';
 import {Styles} from '../../styles/mainStyle';
