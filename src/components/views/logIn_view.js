@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Methods from '../lib/methods';
+import FormErrorsEnum from '../enums/formErrorEnums';
 
 const _methods = new Methods();
-
 
 export default class LogInView extends Component {
   constructor(props) {
@@ -19,6 +19,8 @@ export default class LogInView extends Component {
       },
       email: '',
       password: '',
+      error: false,
+      errorType: '',
       isLoading: true,
       buttonStyle: '#c79274',
     };
@@ -37,9 +39,14 @@ export default class LogInView extends Component {
       email: this.state.email,
       password: this.state.password,
     };
-    
-    
-    let success = await this.postLogIn();
+
+    let success = false;
+
+    if (this.state.user.email || this.state.user.password)
+      success = await this.postLogIn();
+    else {
+      this.setState({error: true, errorType: FormErrorsEnum.EMPTY_FORM});
+    }
 
     if (success) {
       console.log('Log In Success');
@@ -71,14 +78,25 @@ export default class LogInView extends Component {
           throw new Error(e);
         }
       } else {
-        ToastAndroid.show(response.status.toString(), ToastAndroid.SHORT);
-        throw new Error(response.status);
+        this.setState({error: true, errorType: FormErrorsEnum.BAD_REQUEST});
       }
     } catch (e) {
       console.log(e);
     }
   };
 
+  handleError = () => {
+    switch (this.state.errorType) {
+      case FormErrorsEnum.BAD_REQUEST: {
+        console.log('BAD REQUEST');
+        return 'Wrong Email / Password';
+      }
+      case FormErrorsEnum.EMPTY_FORM:
+        return 'Form Empty';
+      default:
+        return 'Unknown Error';
+    }
+  };
   async componentDidMount() {
     this._unsubscribe = this.props.navigation.addListener('focus', async () => {
       _methods.checkLoggedIn();
@@ -102,7 +120,7 @@ export default class LogInView extends Component {
     }*/
     return (
       <View>
-        <Text>COVFEFE LOG-IN</Text>
+        <Text>{this.state.error ? this.handleError() : ''}</Text>
 
         <TextInput
           placeholder="Enter Email"

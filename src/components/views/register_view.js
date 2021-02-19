@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
+import FormErrorsEnum from '../enums/formErrorEnums'
 
 export default class RegisterView extends Component {
   constructor(props) {
@@ -17,6 +18,8 @@ export default class RegisterView extends Component {
       email: '',
       password: '',
       success: false,
+      error: false,
+      errorType: '',
       buttonStyle: '#c79274',
     };
   }
@@ -44,7 +47,13 @@ export default class RegisterView extends Component {
       password: this.state.password,
     };
     
-    await this.postRegister();
+    if(this.state.firstName || this.state.lastName || this.state.email || this.state.password )
+    {
+      await this.postRegister();
+    } else {
+      this.setState({error: true, errorType: FormErrorsEnum.EMPTY_FORM})
+    }
+    
 
     if(this.state.success)
     {
@@ -77,11 +86,24 @@ export default class RegisterView extends Component {
     }
   };
 
+  handleError = () => {
+    switch (this.state.errorType) {
+      case FormErrorsEnum.BAD_REQUEST: {
+        console.log('BAD REQUEST');
+        return 'Invalid Entries';
+      }
+      case FormErrorsEnum.EMPTY_FORM:
+        return 'Form Empty';
+      default:
+        return 'Unknown Error';
+    }
+  };
+
   //Refactor Goals: Use Forms and Form-Bodies instead of this?
   render() {
     return (
       <View>
-        <Text>COVFEFE REGISTER</Text>
+        <Text>{this.state.error ? this.handleError() : ''}</Text>
 
         <TextInput
           placeholder="Enter First Name"
