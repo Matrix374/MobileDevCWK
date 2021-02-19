@@ -21,8 +21,6 @@ export default class LogInView extends Component {
       password: '',
       error: false,
       errorType: '',
-      isLoading: true,
-      buttonStyle: '#c79274',
     };
   }
 
@@ -56,6 +54,9 @@ export default class LogInView extends Component {
 
   postLogIn = async () => {
     try {
+      console.log(
+        'Sending POST Request to http://10.0.2.2:3333/api/1.0.0/user/login',
+      );
       let response = await fetch('http://10.0.2.2:3333/api/1.0.0/user/login', {
         method: 'POST',
         headers: {
@@ -64,6 +65,7 @@ export default class LogInView extends Component {
         body: JSON.stringify(this.state.user),
       });
 
+      console.log(response.status);
       if (response.ok) {
         let json = await response.json();
 
@@ -72,7 +74,6 @@ export default class LogInView extends Component {
         try {
           await AsyncStorage.setItem('@user', JSON.stringify(json));
           console.log('user saved: ' + JSON.stringify(json));
-          console.log('logged in');
           return true;
         } catch (e) {
           throw new Error(e);
@@ -97,27 +98,10 @@ export default class LogInView extends Component {
         return 'Unknown Error';
     }
   };
-  async componentDidMount() {
-    this._unsubscribe = this.props.navigation.addListener('focus', async () => {
-      _methods.checkLoggedIn();
-    });
-  }
-
-  componentWillUnmount() {
-    this._unsubscribe();
-  }
 
   render() {
     const navigation = this.props.navigation;
-    const route = this.props.route;
 
-    //console.log(route);
-    /*if(route.params.user){
-      this.setState({
-        email: route.params.user.email,
-        password: route.params.user.password
-      })
-    }*/
     return (
       <View>
         <Text>{this.state.error ? this.handleError() : ''}</Text>

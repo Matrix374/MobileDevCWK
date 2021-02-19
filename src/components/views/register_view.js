@@ -20,7 +20,6 @@ export default class RegisterView extends Component {
       success: false,
       error: false,
       errorType: '',
-      buttonStyle: '#c79274',
     };
   }
   handleFirstNameChange = (firstName) => {
