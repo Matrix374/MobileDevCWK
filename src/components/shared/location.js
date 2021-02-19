@@ -29,7 +29,7 @@ export default class Location extends Component {
 
     return (
       <View>
-        <Text>{this.state.location.location_name} {this.state.favourite ? '*' : ''}</Text>
+        <Text>{this.state.location.location_name} {this.state.favourite ? '* FAVOURITE *' : ''}</Text>
         <Text>Location: {this.state.location.location_town}</Text>
         <Text>Overall Rating: {this.state.location.avg_overall_rating}</Text>
         <Text>Price Rating: {this.state.location.avg_price_rating}</Text>
