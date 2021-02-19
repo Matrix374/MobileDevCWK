@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {View, Button} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 
 import StorageService from '../lib/storage_service';
 import Methods from '../lib/methods';
@@ -20,7 +19,7 @@ export default class LogOut extends Component {
   handleLogOutButton = async () => {
     if (await this.postLogOut()) await _storageService.DeleteUser();
 
-    _methods.checkLoggedIn();
+    _methods.checkLoggedIn(this.props.navigation);
   };
 
   postLogOut = async () => {

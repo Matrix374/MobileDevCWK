@@ -1,7 +1,7 @@
 export default class Methods {
-  checkLoggedIn = async () => {
+  checkLoggedIn = async (navigation) => {
     console.log('logged in');
-    this.props.navigation.reset({
+    navigation.reset({
       index: 0,
       routes: [{name: 'SplashScreen'}],
     });

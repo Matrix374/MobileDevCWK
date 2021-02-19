@@ -43,7 +43,7 @@ export default class LogInView extends Component {
 
     if (success) {
       console.log('Log In Success');
-      _methods.checkLoggedIn();
+      _methods.checkLoggedIn(this.props.navigation);
     }
   };
 
