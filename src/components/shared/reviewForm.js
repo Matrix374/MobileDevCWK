@@ -5,6 +5,9 @@ import StorageService from '../lib/storage_service';
 
 const _storageService = new StorageService();
 const maxChar = 240;
+const maxRating = 5;
+
+const ratingRangeErrorMessage = 'Value must be between 1-5';
 
 export default class ReviewForm extends Component {
   constructor(props) {
@@ -33,70 +36,111 @@ export default class ReviewForm extends Component {
     };
   }
 
-  checkRatingInput = (value) => {
-    return !isNaN(value) && value > 0 && value <= 10;
+  isRatingValid = (value) => {
+    return !isNaN(value) && value > 0 && value <= maxRating;
   };
 
-  checkMaxInput = (value) => {
+  isReviewBodyValid = (value) => {
     return !(value <= maxChar) || !value;
   };
 
   handleQualityRatingInput = (input) => {
-    let isNum = this.checkRatingInput(input);
+    let isNum = this.isRatingValid(input);
 
-    console.log(isNum);
     if (isNum) {
-      this.setState({quality_rating: input, quality_rating_error: ''});
+      this.setState({
+        quality_rating: input,
+        quality_rating_error: '',
+      });
     } else {
       this.setState({
         quality_rating: '',
-        quality_rating_error: 'Value must be between 1-10',
+        quality_rating_error: ratingRangeErrorMessage,
+        error: true,
       });
     }
   };
 
   handlePriceRatingInput = (input) => {
-    let isNum = this.checkRatingInput(input);
+    let isNum = this.isRatingValid(input);
 
     if (isNum) {
       this.setState({price_rating: input, price_rating_error: ''});
     } else {
       this.setState({
         price_rating: '',
-        price_rating_error: 'Value must be between 1-10',
+        price_rating_error: ratingRangeErrorMessage,
+        error: true,
       });
     }
   };
 
   handleCleanlinessRatingInput = (input) => {
-    let isNum = this.checkRatingInput(input);
+    let isNum = this.isRatingValid(input);
 
     if (isNum) {
-      this.setState({clenliness_rating: input, clenliness_rating_error: ''});
+      this.setState({
+        clenliness_rating: input,
+        clenliness_rating_error: '',
+      });
     } else {
       this.setState({
         clenliness_rating: '',
-        clenliness_rating_error: 'Value must be between 1-10',
+        clenliness_rating_error: ratingRangeErrorMessage,
+        error: true,
       });
     }
   };
 
   handleOverallRatingInput = (input) => {
-    let isNum = this.checkRatingInput(input);
+    let isNum = this.isRatingValid(input);
 
     if (isNum) {
-      this.setState({overall_rating: input, overall_rating_error: ''});
+      this.setState({
+        overall_rating: input,
+        overall_rating_error: '',
+      });
     } else {
       this.setState({
         overall_rating: '',
-        overall_rating_error: 'Value must be between 1-10',
+        overall_rating_error: ratingRangeErrorMessage,
+        error: true,
       });
     }
   };
 
   handleReviewBodyInput = (input) => {
-    console.log(this.checkMaxInput(input))
-    if (this.checkMaxInput(input)) this.setState({review_body: input});
+    if (this.isReviewBodyValid(input)) this.setState({review_body: input});
+  };
+
+  checkErrors = async () => {
+    let foundError = false;
+
+    let ratings = [
+      this.state.quality_rating,
+      this.state.price_rating,
+      this.state.clenliness_rating,
+      this.state.overall_rating
+    ];
+
+    //ToDo: Change Placeholder Error Validation
+    //the error will not be recorded if there's no error on the ratings side
+    if (this.state.review_body === '') {
+      console.log('Review Body Error')
+      foundError = true;
+    }
+
+    ratings.forEach(async (rating, i) => {
+      if (!this.isRatingValid(rating)) {
+        foundError = true;
+        console.log('Rating Error, Rating # ' + i);
+        return;
+      }
+    });
+
+    console.log("Found Error? " + foundError);
+    return foundError;
+  };
   };
 
   async componentDidMount() {
@@ -114,7 +158,7 @@ export default class ReviewForm extends Component {
         <ScrollView>
           <Text>Quality Rating:</Text>
           <TextInput
-            placeholder="(Rate 1-10)"
+            placeholder="(Rate 1-5)"
             onChangeText={(input) => {
               this.handleQualityRatingInput(input);
             }}
@@ -128,7 +172,7 @@ export default class ReviewForm extends Component {
 
           <Text>Price Rating:</Text>
           <TextInput
-            placeholder="(Rate 1-10)"
+            placeholder="(Rate 1-5)"
             onChangeText={(input) => {
               this.handlePriceRatingInput(input);
             }}
@@ -140,7 +184,7 @@ export default class ReviewForm extends Component {
 
           <Text>Cleanliness Rating:</Text>
           <TextInput
-            placeholder="(Rate 1-10)"
+            placeholder="(Rate 1-5)"
             onChangeText={(input) => {
               this.handleCleanlinessRatingInput(input);
             }}
@@ -154,7 +198,7 @@ export default class ReviewForm extends Component {
 
           <Text>Overall Rating:</Text>
           <TextInput
-            placeholder="(Rate 1-10)"
+            placeholder="(Rate 1-5)"
             onChangeText={(input) => {
               this.handleOverallRatingInput(input);
             }}
@@ -168,9 +212,9 @@ export default class ReviewForm extends Component {
 
           <Text>Comments:</Text>
           <TextInput
-            placeholder="Enter Comment... (maxLength: 240)"
+            placeholder={'Enter Comment... (maxLength: ' + maxChar + ')'}
             multiline={true}
-            numberOfLines={4}
+            parseIntOfLines={4}
             maxLength={maxChar}
             onChangeText={(input) => {
               this.handleReviewBodyInput(input);
