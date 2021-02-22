@@ -56,8 +56,10 @@ export default class LocationDetail extends Component {
 
     if (this.state.favourite) {
       this.deleteFavourite();
+      this.setState({favourite: false});
     } else {
       this.postFavourite();
+      this.setState({favourite: true});
     }
   };
 
