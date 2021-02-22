@@ -141,6 +141,66 @@ export default class ReviewForm extends Component {
     console.log("Found Error? " + foundError);
     return foundError;
   };
+
+  handleSubmitButtonClick = async() => {
+    if (this.checkErrors()) {
+      //DoStuff
+      console.log('Packaging Submission');
+      this.setState({
+        review: {
+          overall_rating: parseInt(this.state.overall_rating),
+          quality_rating: parseInt(this.state.quality_rating),
+          price_rating: parseInt(this.state.price_rating),
+          clenliness_rating: parseInt(this.state.clenliness_rating),
+          review_body: this.state.review_body,
+        },
+      });
+      if (this.state.review_id) {
+        //UpdateReview
+        console.log('Updating...');
+      } else {
+        console.log('Submitting...');
+        this.postReview();
+      }
+    } else {
+      //Submission Error
+      console.log('Submission Error');
+    }
+  };
+
+  postReview = async () => {
+    try {
+      console.log(
+        'Sending POST request ' +
+          JSON.stringify(this.state.review) +
+          'TO http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/review with AUTH:' +
+          this.state.userToken,
+      );
+      let response = await fetch(
+        'http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/review',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': this.state.userToken,
+          },
+          body: JSON.stringify(this.state.review),
+        },
+      );
+
+      if (response.ok) {
+        console.log(response.status);
+        this.setState({success: true});
+      } else {
+        throw new Error(response.status);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   async componentDidMount() {
@@ -221,6 +281,12 @@ export default class ReviewForm extends Component {
             }}
             value={this.state.review_body}
           />
+
+          <Button
+            title={this.state.review_id ? 'Update' : 'Submit'}
+            onPress={this.handleSubmitButtonClick}>
+            Submit
+          </Button>
         </ScrollView>
       </View>
     );
