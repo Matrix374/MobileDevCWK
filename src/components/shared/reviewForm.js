@@ -205,11 +205,15 @@ export default class ReviewForm extends Component {
 
   async componentDidMount() {
     let userToken = await _storageService.retrieveToken();
-    await this.setState({
+    this.setState({
       userToken: userToken,
-      review_id: this.props.review_id,
+      review_id: this.props?.review_id,
       location_id: this.props.location_id,
     });
+
+    console.log('props.review_id: ' + this.props?.review_id);
+    console.log('props.location:' + this.props.location_id);
+    console.log('state.location:' + this.state.location_id);
   }
 
   render() {
