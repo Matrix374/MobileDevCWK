@@ -156,8 +156,8 @@ export default class ReviewForm extends Component {
         },
       });
       if (this.state.review_id) {
-        //UpdateReview
         console.log('Updating...');
+        this.patchReview();
       } else {
         console.log('Submitting...');
         this.postReview();
@@ -203,6 +203,44 @@ export default class ReviewForm extends Component {
     }
   };
 
+  patchReview = async () => {
+    try {
+      console.log(
+        'Sending PATCH request ' +
+          JSON.stringify(this.state.review) +
+          'TO http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/review/' +
+          this.state.review_id +
+          ' with AUTH:' +
+          this.state.userToken,
+      );
+      let response = await fetch(
+        'http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/review/' +
+          this.state.review_id,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': this.state.userToken,
+          },
+          body: JSON.stringify(this.state.review),
+        },
+      );
+
+      if (response.ok) {
+        console.log(response.status);
+        this.setState({success: true});
+      } else {
+        throw new Error(response.status);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   async componentDidMount() {
     let userToken = await _storageService.retrieveToken();
     this.setState({
@@ -212,6 +250,7 @@ export default class ReviewForm extends Component {
     });
 
     console.log('props.review_id: ' + this.props?.review_id);
+    console.log('state.review_id: ' + this.state.review_id);
     console.log('props.location:' + this.props.location_id);
     console.log('state.location:' + this.state.location_id);
   }

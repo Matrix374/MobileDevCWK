@@ -27,6 +27,13 @@ export default class Review extends Component {
     //Reset View
   };
 
+  handleUpdateReviewButton = async () => {
+    this.props.navigation.navigate('ReviewUpdate', {
+      location_id: this.state.location_id,
+      review_id: this.state.review.review_id,
+    });
+  };
+
   deleteReview = async () => {
     try {
       console.log(
@@ -76,6 +83,9 @@ export default class Review extends Component {
   render() {
     return (
       <View>
+        <Button title="Update Review" onPress={this.handleUpdateReviewButton}>
+          Update Review
+        </Button>
         <Button title="Delete Review" onPress={this.handleDeleteReviewButton}>
           Delete Review
         </Button>

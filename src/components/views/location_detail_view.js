@@ -142,6 +142,7 @@ export default class LocationDetail extends Component {
           review={item}
           location_id={this.state.location_id}
           userToken={this.state.userToken}
+          navigation={this.props.navigation}
         />
       </View>
     );

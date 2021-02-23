@@ -102,6 +102,7 @@ export default class UserView extends Component {
           review={item.review}
           location_id={item.location.location_id}
           userToken={this.state.userToken}
+          navigation={this.props.navigation}
         />
       </View>
     );
