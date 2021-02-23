@@ -97,7 +97,12 @@ export default class UserView extends Component {
     const renderItem = ({item}) => (
       <View style={Styles.container}>
         <Text>Location: {item.location.location_name}</Text>
-        <Review review={item.review} />
+        <Text>Location ID: {item.location.location_id}</Text>
+        <Review
+          review={item.review}
+          location_id={item.location.location_id}
+          userToken={this.state.userToken}
+        />
       </View>
     );
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {Button, View, Text} from 'react-native';
 
 export default class Review extends Component {
   constructor(props) {
@@ -7,6 +7,7 @@ export default class Review extends Component {
 
     this.state = {
       review: [],
+      userToken: ''
     };
   }
 
@@ -20,14 +21,64 @@ export default class Review extends Component {
     }
   };
 
+  handleDeleteReviewButton = async () => {
+    //Are you sure?
+    this.deleteReview();
+    //Reset View
+  };
+
+  deleteReview = async () => {
+    try {
+      console.log(
+        'Sending DELETE request ' +
+          JSON.stringify(this.state.review) +
+          'TO http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/review/' +
+          this.state.review.review_id +
+          ' with AUTH:' +
+          this.state.userToken,
+      );
+      let response = await fetch(
+        'http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/review/' +
+          this.state.review.review_id,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': this.state.userToken,
+          },
+        },
+      );
+
+      if (response.ok) {
+        console.log(response.status);
+        this.setState({success: true});
+      } else {
+        throw new Error(response.status);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   async componentDidMount() {
     await this.getReview();
+
+    let userToken = this.props.userToken;
+    let loc_id = this.props.location_id;
+
+    await this.setState({userToken: userToken, location_id: loc_id});
   }
 
   render() {
-
     return (
       <View>
+        <Button title="Delete Review" onPress={this.handleDeleteReviewButton}>
+          Delete Review
+        </Button>
         <Text>Review Id: {this.state.review.review_id}</Text>
         <Text>Overall Rating: {this.state.review.overall_rating}</Text>
         <Text>Price Rating: {this.state.review.price_rating}</Text>
@@ -38,4 +89,3 @@ export default class Review extends Component {
     );
   }
 }
-

@@ -126,7 +126,11 @@ export default class LocationDetail extends Component {
   render() {
     const renderItem = ({item}) => (
       <View style={Styles.container}>
-        <Review review={item} />
+        <Review
+          review={item}
+          location_id={this.state.location_id}
+          userToken={this.state.userToken}
+        />
       </View>
     );
 
