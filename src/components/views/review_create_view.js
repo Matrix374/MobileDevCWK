@@ -36,7 +36,7 @@ export default class ReviewCreate extends Component {
   render() {
     return (
       <View>
-        <ReviewForm location_id={this.state.location_id} />
+        <ReviewForm location_id={this.props.route.params.location_id} />
       </View>
     );
   }
