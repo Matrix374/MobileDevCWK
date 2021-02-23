@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, Button, ToastAndroid} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {Styles} from '../../styles/mainStyle';
 
 import StorageService from '../lib/storage_service';
@@ -24,7 +25,10 @@ export default class LocationDetail extends Component {
 
   handleReviewButton = async () => {
     console.log('Leave Review Pressed');
-    this.props.navigation.navigate('ReviewCreate', {location_id: this.state.location_id, review_id: null})
+    this.props.navigation.navigate('ReviewCreate', {
+      location_id: this.state.location_id,
+      review_id: null,
+    });
   };
 
   getData = async () => {
@@ -121,6 +125,14 @@ export default class LocationDetail extends Component {
     console.log('LocationDetail: ' + this.state.userToken);
 
     this.getData();
+
+    this._unsubscribe = this.props.navigation.addListener('focus', async () => {
+      this.getData();
+    });
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
   }
 
   render() {
@@ -143,19 +155,21 @@ export default class LocationDetail extends Component {
     } else {
       return (
         <View>
-          <Text>Location ID: {this.state.location_id}</Text>
-          <Location location={this.state.location} />
-          <Button title="Leave a Review" onPress={this.handleReviewButton}>
-            Leave a Review
-          </Button>
-          <Button
-            title={this.state.favourite ? 'Un-Favourite' : 'Favourite'}
-            onPress={this.handleFavouriteButton}></Button>
-          <FlatList
-            data={this.state.location.location_reviews}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.review_id.toString()}
-          />
+          <ScrollView>
+            <Text>Location ID: {this.state.location_id}</Text>
+            <Location location={this.state.location} />
+            <Button title="Leave a Review" onPress={this.handleReviewButton}>
+              Leave a Review
+            </Button>
+            <Button
+              title={this.state.favourite ? 'Un-Favourite' : 'Favourite'}
+              onPress={this.handleFavouriteButton}></Button>
+            <FlatList
+              data={this.state.location.location_reviews}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.review_id.toString()}
+            />
+          </ScrollView>
         </View>
       );
     }
