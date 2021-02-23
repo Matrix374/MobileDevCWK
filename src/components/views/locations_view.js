@@ -55,6 +55,13 @@ export default class LocationsView extends Component {
     console.log('Home Favourites: ' + this.state.favourites);
 
     this.getData();
+    this._unsubscribe = this.props.navigation.addListener('focus', async () => {
+      this.getData();
+    });
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
   }
 
   render() {
