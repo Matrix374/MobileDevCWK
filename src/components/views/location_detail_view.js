@@ -56,13 +56,13 @@ export default class LocationDetail extends Component {
   };
 
   handleFavouriteButton = async () => {
-    console.log('Favourite Pressed');
+    console.log('Favourite Button Pressed');
 
     if (this.state.favourite) {
-      this.deleteFavourite();
+      await this.deleteFavourite();
       this.setState({favourite: false});
     } else {
-      this.postFavourite();
+      await this.postFavourite();
       this.setState({favourite: true});
     }
   };
