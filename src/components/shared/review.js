@@ -7,7 +7,8 @@ export default class Review extends Component {
 
     this.state = {
       review: [],
-      userToken: ''
+      userToken: '',
+      like: false,
     };
   }
 
@@ -18,6 +19,18 @@ export default class Review extends Component {
       await this.setState({review: review});
     } catch (e) {
       throw new Error(e);
+    }
+  };
+
+  handleLikeButton = async () => {
+    console.log('Like Button Pressed');
+
+    if (this.state.like) {
+      await this.deleteLike();
+      this.setState({like: false});
+    } else {
+      await this.postLike();
+      this.setState({like: true});
     }
   };
 
@@ -32,6 +45,82 @@ export default class Review extends Component {
       location_id: this.state.location_id,
       review_id: this.state.review.review_id,
     });
+  };
+
+  postLike = async () => {
+    //doStuff
+    try {
+      console.log(
+        'Sending POST request ' +
+          JSON.stringify(this.state.review) +
+          'TO http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/review/' +
+          this.state.review.review_id + 
+          '/like with AUTH:' +
+          this.state.userToken,
+      );
+      let response = await fetch(
+        'http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/review/' +
+          this.state.review.review_id + '/like',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': this.state.userToken,
+          }
+        },
+      );
+
+      if (response.ok) {
+        console.log(response.status);
+        this.setState({success: true});
+      } else {
+        throw new Error(response.status);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  deleteLike = async () => {
+    //doStuff
+    try {
+      console.log(
+        'Sending POST request ' +
+          JSON.stringify(this.state.review) +
+          'TO http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/review/' +
+          this.state.review.review_id + 
+          '/like with AUTH:' +
+          this.state.userToken,
+      );
+      let response = await fetch(
+        'http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/review/' +
+          this.state.review.review_id + '/like',
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': this.state.userToken,
+          }
+        },
+      );
+
+      if (response.ok) {
+        console.log(response.status);
+        this.setState({success: true});
+      } else {
+        throw new Error(response.status);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   deleteReview = async () => {
@@ -95,6 +184,9 @@ export default class Review extends Component {
         <Text>Quality Rating: {this.state.review.quality_rating}</Text>
         <Text>Cleanliness Rating: {this.state.review.clenliness_rating}</Text>
         <Text>{this.state.review.review_body}</Text>
+        <Button
+          title={this.state.like ? 'Remove Like' : 'Like'}
+          onPress={this.handleLikeButton}></Button>
       </View>
     );
   }

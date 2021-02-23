@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList, Button, Alert} from 'react-native';
+import {View, Text, FlatList, Button, Alert, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import StorageService from '../lib/storage_service';
 import Loading from '../shared/loading';
@@ -116,20 +116,29 @@ export default class UserView extends Component {
     } else {
       return (
         <View>
-          <Button
-            title="Update User Information"
-            onPress={this.handleUpdateButton}>
-            Update User Information
-          </Button>
-          <Text>User Id: {this.state.user.user_id}</Text>
-          <Text>First Name: {this.state.user.first_name}</Text>
-          <Text>Last Name: {this.state.user.last_name}</Text>
-          <Text>E-Mail: {this.state.user.email}</Text>
-          <FlatList
-            data={this.state.user.reviews}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.review.review_id}
-          />
+          <ScrollView>
+            <Button
+              title="Update User Information"
+              onPress={this.handleUpdateButton}>
+              Update User Information
+            </Button>
+            <Text>User Id: {this.state.user.user_id}</Text>
+            <Text>First Name: {this.state.user.first_name}</Text>
+            <Text>Last Name: {this.state.user.last_name}</Text>
+            <Text>E-Mail: {this.state.user.email}</Text>
+            <Text>Reviews Made:</Text>
+            <FlatList
+              data={this.state.user.reviews}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.review.review_id}
+            />
+            <Text>Reviews Liked:</Text>
+            <FlatList
+              data={this.state.user.liked_reviews}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.review.review_id}
+            />
+          </ScrollView>
         </View>
       );
     }
