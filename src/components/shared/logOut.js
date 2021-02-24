@@ -3,9 +3,11 @@ import {View, Button} from 'react-native';
 
 import StorageService from '../../lib/storage_service';
 import Methods from '../../lib/methods';
+import UserController from '../../controllers/userController';
 
 const _storageService = new StorageService();
 const _methods = new Methods();
+const _userController = new UserController();
 
 export default class LogOut extends Component {
   constructor(props) {
@@ -23,25 +25,8 @@ export default class LogOut extends Component {
   };
 
   postLogOut = async () => {
-    try {
-      let response = await fetch('http://10.0.2.2:3333/api/1.0.0/user/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization': this.state.userToken,
-        },
-      });
-
-      if (response.ok) {
-        console.log('Logged Out');
-        return true;
-      } else {
-        throw new Error(response.status);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+    return await _userController.LogOutUserAsync(this.state.userToken);
+  }
 
   async componentDidMount() {
     let userToken = await _storageService.retrieveToken();

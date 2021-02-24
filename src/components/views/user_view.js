@@ -5,8 +5,10 @@ import StorageService from '../../lib/storage_service';
 import Loading from '../shared/loading';
 import Review from '../shared/review';
 import {Styles} from '../../styles/mainStyle';
+import UserController from '../../controllers/userController';
 
 const _storageService = new StorageService();
+const _userController = new UserController();
 
 export default class UserView extends Component {
   constructor(props) {
@@ -28,38 +30,13 @@ export default class UserView extends Component {
   };
 
   getUser = async () => {
-    try {
-      console.log('Getting User');
-      let response = await fetch(
-        'http://10.0.2.2:3333/api/1.0.0/user/' + this.state.id,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization': this.state.userToken,
-          },
-        },
-      );
+    let user = await _userController.GetUserAsync(this.state.id, this.state.userToken)
 
-      if (response.ok) {
-        let json = await response.json();
-
-        console.log(JSON.stringify(json.reviews[0].review));
-
-        this.saveFavourites(json.favourite_locations);
-        this.setState({
-          isLoading: false,
-          user: json,
-        });
-      } else {
-        console.log(response.status);
-        this.setState({
-          isLoading: false,
-        });
-      }
-    } catch (e) {
-      throw new Error(e);
-    }
+    this.saveFavourites(user.favourite_locations);
+    this.setState({
+      isLoading: false,
+      user: user
+    })
   };
 
   saveFavourites = async (fav_locations) => {

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
-import FormErrorsEnum from '../../enums/formErrorEnums'
+import UserController from '../../controllers/userController';
+import FormErrorsEnum from '../../enums/formErrorEnums';
+
+const _userController = new UserController();
 
 export default class RegisterView extends Component {
   constructor(props) {
@@ -17,7 +20,6 @@ export default class RegisterView extends Component {
       lastName: '',
       email: '',
       password: '',
-      success: false,
       error: false,
       errorType: '',
     };
@@ -39,50 +41,33 @@ export default class RegisterView extends Component {
   };
 
   handleRegisterButtonClick = async () => {
+    let success = false;
+
     this.state.user = {
       first_name: this.state.firstName,
       last_name: this.state.lastName,
       email: this.state.email,
       password: this.state.password,
     };
-    
-    if(this.state.firstName || this.state.lastName || this.state.email || this.state.password )
-    {
-      await this.postRegister();
-    } else {
-      this.setState({error: true, errorType: FormErrorsEnum.EMPTY_FORM})
-    }
-    
 
-    if(this.state.success)
-    {
+    if (
+      this.state.firstName ||
+      this.state.lastName ||
+      this.state.email ||
+      this.state.password
+    ) {
+      success = await this.postRegister();
+    } else {
+      this.setState({error: true, errorType: FormErrorsEnum.EMPTY_FORM});
+    }
+
+    if (success) {
       this.props.navigation.navigate('LogIn');
     }
   };
 
   postRegister = async () => {
-    try {
-      let response = await fetch('http://10.0.2.2:3333/api/1.0.0/user/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(this.state.user),
-      });
-
-      if (response.ok) {
-        let json = await response.json();
-
-        console.log('json: ' + JSON.stringify(json));
-
-        this.setState({success: true})
-      } else {
-        ToastAndroid.show(response.status.toString(), ToastAndroid.SHORT);
-        throw new Error(response.status);
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    return await _userController.RegisterUserAsync(JSON.stringify(this.state.user));
   };
 
   handleError = () => {

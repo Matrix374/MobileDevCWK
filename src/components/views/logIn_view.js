@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Methods from '../../lib/methods';
 import FormErrorsEnum from '../../enums/formErrorEnums';
+import UserController from '../../controllers/userController';
+import StorageService from '../../lib/storage_service';
 
 const _methods = new Methods();
+const _userController = new UserController();
+const _storageService = new StorageService();
 
 export default class LogInView extends Component {
   constructor(props) {
@@ -15,7 +18,7 @@ export default class LogInView extends Component {
         email: '',
         password: '',
         id: null,
-        userToken: null
+        userToken: null,
       },
       email: '',
       password: '',
@@ -53,43 +56,21 @@ export default class LogInView extends Component {
   };
 
   postLogIn = async () => {
-    try {
-      console.log(
-        'Sending POST Request to http://10.0.2.2:3333/api/1.0.0/user/login',
-      );
-      let response = await fetch('http://10.0.2.2:3333/api/1.0.0/user/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(this.state.user),
-      });
+    let user = await _userController.LogInUserAsync(
+      JSON.stringify(this.state.user),
+    );
 
-      console.log(response.status);
-      if (response.ok) {
-        let json = await response.json();
-
-        console.log('json: ' + JSON.stringify(json));
-
-        try {
-          await AsyncStorage.setItem('@user', JSON.stringify(json));
-          console.log('user saved: ' + JSON.stringify(json));
-          return true;
-        } catch (e) {
-          throw new Error(e);
-        }
-      } else {
-        this.setState({error: true, errorType: FormErrorsEnum.BAD_REQUEST});
-      }
-    } catch (e) {
-      console.log(e);
+    if (user) {
+      await _storageService.saveUser(user);
+      return true;
+    } else {
+      this.setState({error: true, errorType: FormErrorsEnum.BAD_REQUEST});
     }
   };
 
   handleError = () => {
     switch (this.state.errorType) {
       case FormErrorsEnum.BAD_REQUEST: {
-        console.log('BAD REQUEST');
         return 'Wrong Email / Password';
       }
       case FormErrorsEnum.EMPTY_FORM:
