@@ -20,5 +20,10 @@ export const Styles = StyleSheet.create({
   },
   bg: {
     backgroundColor: "#724620"
+  },
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   }
 });
