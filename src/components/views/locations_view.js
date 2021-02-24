@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, FlatList, Text, Button} from 'react-native';
-import StorageService from '../lib/storage_service';
+import StorageService from '../../lib/storage_service';
 import {Styles} from '../../styles/mainStyle';
 
 import Loading from '../shared/loading';

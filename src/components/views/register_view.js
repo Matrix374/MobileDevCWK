@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
-import FormErrorsEnum from '../enums/formErrorEnums'
+import FormErrorsEnum from '../../enums/formErrorEnums'
 
 export default class RegisterView extends Component {
   constructor(props) {

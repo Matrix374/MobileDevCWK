@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
-import StorageService from '../lib/storage_service';
+import StorageService from '../../lib/storage_service';
 import ReviewForm from '../shared/reviewForm';
 
 const _storageService = new StorageService();

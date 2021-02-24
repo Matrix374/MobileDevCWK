@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, Button, Alert} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import {Styles} from '../../styles/mainStyle';
-import StorageService from '../lib/storage_service';
+import StorageService from '../../lib/storage_service';
 
 const _storageService = new StorageService();
 

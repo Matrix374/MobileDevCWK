@@ -3,7 +3,7 @@ import {View, Text, FlatList, Button, ToastAndroid} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Styles} from '../../styles/mainStyle';
 
-import StorageService from '../lib/storage_service';
+import StorageService from '../../lib/storage_service';
 import Loading from '../shared/loading';
 import Location from '../shared/location';
 import Review from '../shared/review';

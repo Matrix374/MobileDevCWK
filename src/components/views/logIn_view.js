@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Methods from '../lib/methods';
-import FormErrorsEnum from '../enums/formErrorEnums';
+import Methods from '../../lib/methods';
+import FormErrorsEnum from '../../enums/formErrorEnums';
 
 const _methods = new Methods();
 

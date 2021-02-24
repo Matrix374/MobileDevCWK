@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, Button, ToastAndroid} from 'react-native';
-import StorageService from '../lib/storage_service';
+import StorageService from '../../lib/storage_service';
 
 const _storageService = new StorageService();
 

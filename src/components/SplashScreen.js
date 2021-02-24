@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 
 import MainScreen from './MainScreen';
-import StorageService from './lib/storage_service';
+import StorageService from '../lib/storage_service';
 import AuthFlowScreen from './AuthFlowScreen';
 
 const Stack = createStackNavigator();

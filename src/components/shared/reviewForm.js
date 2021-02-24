@@ -1,7 +1,6 @@
 import React, {Component, useState} from 'react';
-import {View, Text, TextInput, Button} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import StorageService from '../lib/storage_service';
+import {View, Text, TextInput, Button, ScrollView} from 'react-native';
+import StorageService from '../../lib/storage_service';
 
 const _storageService = new StorageService();
 const maxChar = 240;

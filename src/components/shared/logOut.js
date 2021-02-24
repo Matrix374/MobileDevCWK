@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View, Button} from 'react-native';
 
-import StorageService from '../lib/storage_service';
-import Methods from '../lib/methods';
+import StorageService from '../../lib/storage_service';
+import Methods from '../../lib/methods';
 
 const _storageService = new StorageService();
 const _methods = new Methods();
