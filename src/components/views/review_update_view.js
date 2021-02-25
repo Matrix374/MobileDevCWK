@@ -26,7 +26,6 @@ export default class ReviewUpdate extends Component {
     let userToken = await _storageService.retrieveToken();
     let params = this.props.route.params;
 
-    console.log('ReviewUpdate Params: ' + params);
     await this.setState({
       userToken: userToken,
       location_id: params.location_id,
@@ -37,7 +36,7 @@ export default class ReviewUpdate extends Component {
   render() {
     return (
       <View>
-        <ReviewForm location_id={this.props.route.params.location_id} review_id={this.props.route.params.review_id} />
+        <ReviewForm location_id={this.props.route.params.location_id} review_id={this.props.route.params.review_id} navigation={this.props.navigation} />
       </View>
     );
   }

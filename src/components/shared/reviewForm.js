@@ -1,6 +1,7 @@
 import React, {Component, useState} from 'react';
-import {View, Text, TextInput, Button, ScrollView} from 'react-native';
+import {View, Text, TextInput, Button, ScrollView, Alert} from 'react-native';
 import StorageService from '../../lib/storage_service';
+import Camera from './camera';
 
 const _storageService = new StorageService();
 const maxChar = 240;
@@ -32,6 +33,7 @@ export default class ReviewForm extends Component {
       userToken: '',
       location_id: '',
       review_id: '',
+      hasPhoto: false,
     };
   }
 
@@ -240,6 +242,67 @@ export default class ReviewForm extends Component {
     }
   };
 
+  checkPhoto = async () => {
+    let url =
+      'http://10.0.2.2:3333/api/1.0.0/location/' +
+      this.state.location_id +
+      '/review/' +
+      this.state.review_id +
+      '/photo';
+
+    try {
+      let response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Authorization': this.state.userToken,
+        },
+      });
+
+      if (response.ok) {
+        console.log('Photo Exists');
+        this.setState({hasPhoto: true});
+        //save photo for display
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  handleDeletePhotoButton = async () => {
+    let success = await this.deletePhoto();
+
+    if (success) {
+      Alert.alert('Photo Deleted');
+    }
+  };
+
+  deletePhoto = async () => {
+    let url =
+      'http://10.0.2.2:3333/api/1.0.0/location/' +
+      this.state.location_id +
+      '/review/' +
+      this.state.review_id +
+      '/photo';
+
+    try {
+      let response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Authorization': this.state.userToken,
+        },
+      });
+
+      if (response.ok) {
+        console.log('Photo Deleted');
+        this.setState({hasPhoto: false});
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   async componentDidMount() {
     let userToken = await _storageService.retrieveToken();
     this.setState({
@@ -252,9 +315,35 @@ export default class ReviewForm extends Component {
     console.log('state.review_id: ' + this.state.review_id);
     console.log('props.location:' + this.props.location_id);
     console.log('state.location:' + this.state.location_id);
+
+    this.checkPhoto();
   }
 
   render() {
+    let TakePhoto = (
+      <Button
+        title="Add Picture"
+        onPress={() => {
+          this.props.navigation.navigate('Camera', {
+            location_id: this.state.location_id,
+            review_id: this.state.review_id,
+          });
+        }}
+      />
+    );
+
+    let DeletePhoto = (
+      <Button
+        title="Delete Picture"
+        onPress={() => {
+          this.handleDeletePhotoButton();
+        }}
+      />
+    );
+
+    let EditComponents = (
+      <View>{this.state.hasPhoto === true ? DeletePhoto : TakePhoto}</View>
+    );
     return (
       <View>
         <ScrollView>
@@ -323,6 +412,8 @@ export default class ReviewForm extends Component {
             }}
             value={this.state.review_body}
           />
+
+          {this.state.review_id ? EditComponents : null}
 
           <Button
             title={this.state.review_id ? 'Update' : 'Submit'}
