@@ -7,7 +7,7 @@ export default class Location extends Component {
 
     this.state = {
       location: [],
-      favourite: false
+      favourite: false,
     };
   }
 
@@ -26,15 +26,19 @@ export default class Location extends Component {
   }
 
   render() {
-
     return (
       <View>
-        <Text>{this.state.location.location_name} {this.state.favourite ? '* FAVOURITE *' : ''}</Text>
+        <Text>
+          {this.state.location.location_name}{' '}
+          {this.state.favourite ? '* FAVOURITE *' : ''}
+        </Text>
         <Text>Location: {this.state.location.location_town}</Text>
         <Text>Overall Rating: {this.state.location.avg_overall_rating}</Text>
         <Text>Price Rating: {this.state.location.avg_price_rating}</Text>
         <Text>Quality Rating: {this.state.location.avg_quality_rating}</Text>
-        <Text>Cleanliness Rating: {this.state.location.avg_clenliness_rating}</Text>
+        <Text>
+          Cleanliness Rating: {this.state.location.avg_clenliness_rating}
+        </Text>
       </View>
     );
   }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, FlatList, Text, Button} from 'react-native';
+import {View, FlatList, Text, Button, TouchableOpacity} from 'react-native';
 import StorageService from '../../lib/storage_service';
 import {Styles} from '../../styles/mainStyle';
 
@@ -22,9 +22,12 @@ export default class LocationsView extends Component {
   }
 
   handleLocationButton = (id, favourite) => {
-    console.log('Go to Location ' + id)
-    this.props.navigation.navigate('LocationDetail', {location_id: id, favourite: favourite})
-  }
+    console.log('Go to Location ' + id);
+    this.props.navigation.navigate('LocationDetail', {
+      location_id: id,
+      favourite: favourite,
+    });
+  };
 
   getData = async () => {
     try {
@@ -66,12 +69,27 @@ export default class LocationsView extends Component {
 
   render() {
     const renderItem = ({item}) => (
-      <View style={Styles.container}>
-        <Location location={item} favourite={this.state.favourites.includes(item.location_id)}/>
-        <Button
-          style={Styles.button}
-          title="Details"
-          onPress={() => {this.handleLocationButton(item.location_id, this.state.favourites.includes(item.location_id))}}></Button>
+      <View
+        style={
+          this.state.favourites.includes(item.location_id)
+            ? Styles.container_favourite
+            : Styles.container
+        }>
+        <TouchableOpacity
+          onPress={() => {
+            this.handleLocationButton(
+              item.location_id,
+              this.state.favourites.includes(item.location_id),
+            );
+          }}>
+          {this.state.favourites.includes(item.location_id) ? (
+            <Text style={Styles.subtitle_favourite}>Favourited</Text>
+          ) : null}
+          <Text style={Styles.title}>{item.location_name}</Text>
+          <Text style={Styles.subtitle}>Locations: {item.location_town}</Text>
+          <Text style={Styles.subtitle}>Rating: {item.avg_overall_rating}</Text>
+          <Text style={Styles.subtitle}>Price: {item.avg_price_rating}</Text>
+        </TouchableOpacity>
       </View>
     );
 
@@ -84,8 +102,8 @@ export default class LocationsView extends Component {
       );
     } else {
       return (
-        <View>
-          <LogOut navigation={this.props.navigation}/>
+        <View style={Styles.bg}>
+          <LogOut navigation={this.props.navigation} />
           <FlatList
             data={this.state.locations}
             renderItem={renderItem}
