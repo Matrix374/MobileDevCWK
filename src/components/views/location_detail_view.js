@@ -20,7 +20,7 @@ export default class LocationDetail extends Component {
       location_id: null,
       isLoading: true,
       location: [],
-      user_reviews: '',
+      user_reviews: [],
     };
   }
 
@@ -136,6 +136,7 @@ export default class LocationDetail extends Component {
 
     this._unsubscribe = this.props.navigation.addListener('focus', async () => {
       this.getData();
+      this.getReviews();
     });
   }
 
@@ -165,24 +166,26 @@ export default class LocationDetail extends Component {
     } else {
       return (
         <View style={Styles.bg}>
-          <ScrollView>
-            <Location location={this.state.location} />
-            <Button
-              color="red"
-              title="Leave a Review"
-              onPress={this.handleReviewButton}>
-              Leave a Review
-            </Button>
-            <Button
-              color="red"
-              title={this.state.favourite ? 'Un-Favourite' : 'Favourite'}
-              onPress={this.handleFavouriteButton}></Button>
-            <FlatList
-              data={this.state.location.location_reviews}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.review_id.toString()}
-            />
-          </ScrollView>
+          <FlatList
+            ListHeaderComponent={
+              <>
+                <Location location={this.state.location} />
+                <Button
+                  color="red"
+                  title="Leave a Review"
+                  onPress={this.handleReviewButton}>
+                  Leave a Review
+                </Button>
+                <Button
+                  color="red"
+                  title={this.state.favourite ? 'Un-Favourite' : 'Favourite'}
+                  onPress={this.handleFavouriteButton}></Button>
+              </>
+            }
+            data={this.state.location.location_reviews}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.review_id.toString()}
+          />
         </View>
       );
     }
