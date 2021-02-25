@@ -2,7 +2,6 @@ import React, {Component, useState} from 'react';
 import {View, Text, TextInput, Button, ScrollView, Alert} from 'react-native';
 import profanities from '../../etc/profanityList';
 import StorageService from '../../lib/storage_service';
-import Camera from './camera';
 
 const _storageService = new StorageService();
 const maxChar = 240;
