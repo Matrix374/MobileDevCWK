@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, View, Text} from 'react-native';
+import {Button, View, Text, Image} from 'react-native';
 import {Styles} from '../../styles/mainStyle';
 
 export default class Review extends Component {
@@ -10,6 +10,8 @@ export default class Review extends Component {
       review: [],
       userToken: '',
       like: false,
+      hasPhoto: false,
+      photoUrl: '',
     };
   }
 
@@ -20,6 +22,33 @@ export default class Review extends Component {
       await this.setState({review: review});
     } catch (e) {
       throw new Error(e);
+    }
+  };
+
+  getPhoto = async () => {
+    let url =
+      'http://10.0.2.2:3333/api/1.0.0/location/' +
+      this.state.location_id +
+      '/review/' +
+      this.state.review.review_id +
+      '/photo';
+
+    try {
+      console.log('Sending GET Request TO ' + url);
+      let response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Authorization': this.state.userToken,
+        },
+      });
+
+      if (response.ok) {
+        console.log('Photo Exists');
+        this.setState({hasPhoto: true});
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -170,6 +199,8 @@ export default class Review extends Component {
     let loc_id = this.props.location_id;
 
     await this.setState({userToken: userToken, location_id: loc_id});
+
+    await this.getPhoto();
   }
 
   render() {
@@ -184,8 +215,25 @@ export default class Review extends Component {
       </View>
     );
 
+    let PhotoComponent = (
+      <View>
+        <Image
+          style={Styles.image_thumb}
+          source={{
+            uri:
+              'http://10.0.2.2:3333/api/1.0.0/location/' +
+              this.state.location_id +
+              '/review/' +
+              this.state.review.review_id +
+              '/photo',
+          }}
+        />
+      </View>
+    );
+
     return (
       <View>
+        {this.state.hasPhoto === true ? PhotoComponent : null}
         <Text style={Styles.subtitle}>
           Review Id: {this.state.review.review_id}
         </Text>
@@ -201,7 +249,7 @@ export default class Review extends Component {
         <Text style={Styles.subtitle}>
           Cleanliness Rating: {this.state.review.clenliness_rating}
         </Text>
-        <Text style={Styles.subtitle}>{this.state.review.review_body}</Text>
+        <Text style={Styles.review_body}>{this.state.review.review_body}</Text>
 
         {this.props?.user_reviews.includes(this.state.review.review_id) === true
           ? EditComponents

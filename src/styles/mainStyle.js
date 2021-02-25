@@ -55,6 +55,16 @@ export const Styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    flex: 0.3,
+    width: 100,
+    height: 100,
+  },
+  image_thumb: {
+    width: 50,
+    height: 50,
+  },
+  review_body: {
+    backgroundColor: '#ac835a',
+    padding: 20,
+    margin: 10,
   },
 });
