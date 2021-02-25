@@ -18,7 +18,20 @@ export default class Home extends Component {
   render() {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="Locations" component={LocationsView} />
+        <Stack.Screen
+          name="Locations"
+          component={LocationsView}
+          options={{
+            title: 'Home',
+            headerStyle: {
+              backgroundColor: '#f4511e',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
         <Stack.Screen name="LocationDetail" component={LocationDetail} />
         <Stack.Screen name="ReviewCreate" component={ReviewCreate} />
         <Stack.Screen name="ReviewUpdate" component={ReviewUpdate} />

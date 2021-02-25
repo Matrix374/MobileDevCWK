@@ -1,12 +1,9 @@
-
-
 import React, {Component} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import HomeScreen from './HomeScreen';
 import UserScreen from './UserScreen';
-import { Styles } from '../styles/mainStyle';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,9 +18,9 @@ export default class MainScreen extends Component {
 
   render() {
     return (
-      <Tab.Navigator style={Styles.bg}>
+      <Tab.Navigator>
         <Tab.Screen name="HomeScreen" component={HomeScreen} />
-        <Tab.Screen name="UserScreen" component={UserScreen}/>
+        <Tab.Screen name="UserScreen" component={UserScreen} />
       </Tab.Navigator>
     );
   }

@@ -2,6 +2,10 @@ import {StyleSheet} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 export const Styles = StyleSheet.create({
+  tab_button: {
+    fontSize: 16,
+    justifyContent: 'space-between',
+  },
   title: {
     fontSize: 24,
   },
@@ -10,16 +14,16 @@ export const Styles = StyleSheet.create({
   },
   subtitle_favourite: {
     fontSize: 16,
-    color: 'red'
+    color: 'red',
   },
   button: {
-    display: 'flex',
-    flex: 0.3,
-    color: '#4a1a1a',
-    justifyContent: 'flex-start',
+    color: 'red',
   },
   buttonPress: {
     color: '#130e0b',
+  },
+  logOut_button: {
+    color: '#4a1a1a',
   },
   container: {
     flex: 1,
@@ -35,6 +39,13 @@ export const Styles = StyleSheet.create({
     padding: 20,
     margin: 10,
   },
+  location_detail: {
+    flex: 1,
+    justifyContent: 'space-between',
+    backgroundColor: '#ac835a',
+    padding: 20,
+    margin: 10,
+  },
   bg: {
     backgroundColor: '#4a1a1a',
   },
@@ -42,5 +53,8 @@ export const Styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  image: {
+    flex: 0.3,
   },
 });

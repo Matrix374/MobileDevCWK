@@ -155,14 +155,17 @@ export default class LocationDetail extends Component {
       );
     } else {
       return (
-        <View>
+        <View style={Styles.bg}>
           <ScrollView>
-            <Text>Location ID: {this.state.location_id}</Text>
             <Location location={this.state.location} />
-            <Button title="Leave a Review" onPress={this.handleReviewButton}>
+            <Button
+              color="red"
+              title="Leave a Review"
+              onPress={this.handleReviewButton}>
               Leave a Review
             </Button>
             <Button
+              color="red"
               title={this.state.favourite ? 'Un-Favourite' : 'Favourite'}
               onPress={this.handleFavouriteButton}></Button>
             <FlatList
