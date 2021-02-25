@@ -1,13 +1,14 @@
 import {Alert} from 'react-native';
 
+const url = 'http://10.0.2.2:3333/api/1.0.0/user/';
+
 export default class UserController {
   //returns user
+
   async GetUserAsync(id, userToken) {
     try {
-      console.log(
-        'Sending GET request TO http://10.0.2.2:3333/api/1.0.0/user/' + id,
-      );
-      let response = await fetch('http://10.0.2.2:3333/api/1.0.0/user/' + id, {
+      console.log('Sending GET request TO ' + url + id);
+      let response = await fetch(url + id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -32,12 +33,13 @@ export default class UserController {
       console.log(
         'Sending PATCH request ' +
           user +
-          'TO http://10.0.2.2:3333/api/1.0.0/user/' +
+          'TO ' +
+          url +
           id +
           ' with AUTH:' +
           userToken,
       );
-      let response = await fetch('http://10.0.2.2:3333/api/1.0.0/user/' + id, {
+      let response = await fetch(url + id, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -60,12 +62,8 @@ export default class UserController {
   //returns boolean
   async RegisterUserAsync(user) {
     try {
-      console.log(
-        'Sending POST Request ' +
-          user +
-          ' TO http://10.0.2.2:3333/api/1.0.0/user/',
-      );
-      let response = await fetch('http://10.0.2.2:3333/api/1.0.0/user/', {
+      console.log('Sending POST Request ' + user + ' TO ' + url);
+      let response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,10 +87,8 @@ export default class UserController {
 
   async LogInUserAsync(user) {
     try {
-      console.log(
-        'Sending POST Request TO http://10.0.2.2:3333/api/1.0.0/user/login',
-      );
-      let response = await fetch('http://10.0.2.2:3333/api/1.0.0/user/login', {
+      console.log('Sending POST Request TO ' + url + 'login');
+      let response = await fetch(url + 'login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +113,7 @@ export default class UserController {
 
   async LogOutUserAsync(userToken) {
     try {
-      let response = await fetch('http://10.0.2.2:3333/api/1.0.0/user/logout', {
+      let response = await fetch(url + 'logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
