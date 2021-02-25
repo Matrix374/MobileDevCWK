@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, View, Text} from 'react-native';
+import {Styles} from '../../styles/mainStyle';
 
 export default class Review extends Component {
   constructor(props) {
@@ -56,7 +57,7 @@ export default class Review extends Component {
           'TO http://10.0.2.2:3333/api/1.0.0/location/' +
           this.state.location_id +
           '/review/' +
-          this.state.review.review_id + 
+          this.state.review.review_id +
           '/like with AUTH:' +
           this.state.userToken,
       );
@@ -64,13 +65,14 @@ export default class Review extends Component {
         'http://10.0.2.2:3333/api/1.0.0/location/' +
           this.state.location_id +
           '/review/' +
-          this.state.review.review_id + '/like',
+          this.state.review.review_id +
+          '/like',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-Authorization': this.state.userToken,
-          }
+          },
         },
       );
 
@@ -94,7 +96,7 @@ export default class Review extends Component {
           'TO http://10.0.2.2:3333/api/1.0.0/location/' +
           this.state.location_id +
           '/review/' +
-          this.state.review.review_id + 
+          this.state.review.review_id +
           '/like with AUTH:' +
           this.state.userToken,
       );
@@ -102,13 +104,14 @@ export default class Review extends Component {
         'http://10.0.2.2:3333/api/1.0.0/location/' +
           this.state.location_id +
           '/review/' +
-          this.state.review.review_id + '/like',
+          this.state.review.review_id +
+          '/like',
         {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
             'X-Authorization': this.state.userToken,
-          }
+          },
         },
       );
 
@@ -170,7 +173,7 @@ export default class Review extends Component {
   }
 
   render() {
-    return (
+    let EditComponents = (
       <View>
         <Button title="Update Review" onPress={this.handleUpdateReviewButton}>
           Update Review
@@ -178,12 +181,32 @@ export default class Review extends Component {
         <Button title="Delete Review" onPress={this.handleDeleteReviewButton}>
           Delete Review
         </Button>
-        <Text>Review Id: {this.state.review.review_id}</Text>
-        <Text>Overall Rating: {this.state.review.overall_rating}</Text>
-        <Text>Price Rating: {this.state.review.price_rating}</Text>
-        <Text>Quality Rating: {this.state.review.quality_rating}</Text>
-        <Text>Cleanliness Rating: {this.state.review.clenliness_rating}</Text>
-        <Text>{this.state.review.review_body}</Text>
+      </View>
+    );
+
+    return (
+      <View>
+        <Text style={Styles.subtitle}>
+          Review Id: {this.state.review.review_id}
+        </Text>
+        <Text style={Styles.subtitle}>
+          Overall Rating: {this.state.review.overall_rating}
+        </Text>
+        <Text style={Styles.subtitle}>
+          Price Rating: {this.state.review.price_rating}
+        </Text>
+        <Text style={Styles.subtitle}>
+          Quality Rating: {this.state.review.quality_rating}
+        </Text>
+        <Text style={Styles.subtitle}>
+          Cleanliness Rating: {this.state.review.clenliness_rating}
+        </Text>
+        <Text style={Styles.subtitle}>{this.state.review.review_body}</Text>
+
+        {this.props?.user_reviews.includes(this.state.review.review_id) === true
+          ? EditComponents
+          : null}
+
         <Button
           title={this.state.like ? 'Remove Like' : 'Like'}
           onPress={this.handleLikeButton}></Button>

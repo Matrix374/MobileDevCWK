@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
 import {View, FlatList, Text, Button, TouchableOpacity} from 'react-native';
+import UserController from '../../controllers/userController';
+import Methods from '../../lib/methods';
 import StorageService from '../../lib/storage_service';
 import {Styles} from '../../styles/mainStyle';
 
 import Loading from '../shared/loading';
-import Location from '../shared/location';
 import LogOut from '../shared/logOut';
 
 const _storageService = new StorageService();
+const _userController = new UserController();
+const _methods = new Methods();
 
 export default class LocationsView extends Component {
   constructor(props) {
@@ -18,6 +21,7 @@ export default class LocationsView extends Component {
       favourites: [],
       isLoading: true,
       locations: [],
+      user: [],
     };
   }
 
@@ -50,16 +54,42 @@ export default class LocationsView extends Component {
     }
   };
 
+  getUser = async () => {
+    let user_id = await _storageService.retrieveUserId();
+    let user = await _userController.GetUserAsync(
+      user_id,
+      this.state.userToken,
+    );
+    await this.saveFavourites(user.favourite_locations);
+    await this.saveReviews(user.reviews);
+
+    let favourites = await _storageService.retrieveFavourites();
+    this.setState({favourites: favourites});
+  };
+
+  saveReviews = async (reviews) => {
+    let review_ids = _methods.getReviewIds(reviews);
+    console.log('review ids: ' + review_ids);
+    await _storageService.saveReviews(review_ids);
+  };
+
+  saveFavourites = async (fav_locations) => {
+    let fav_ids = _methods.getFavouriteIds(fav_locations);
+    await _storageService.saveFavourites(fav_ids);
+  };
+
   async componentDidMount() {
     let userToken = await _storageService.retrieveToken();
-    let favourites = await _storageService.retrieveFavourites();
-    await this.setState({userToken: userToken, favourites: favourites});
+    this.setState({userToken: userToken});
+
     console.log('Home: ' + this.state.userToken);
     console.log('Home Favourites: ' + this.state.favourites);
 
     this.getData();
+    this.getUser();
     this._unsubscribe = this.props.navigation.addListener('focus', async () => {
       this.getData();
+      this.getUser();
     });
   }
 

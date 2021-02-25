@@ -1,14 +1,18 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, Button, Alert, ScrollView} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import StorageService from '../../lib/storage_service';
+import UserController from '../../controllers/userController';
+import Methods from '../../lib/methods';
+
+import {Styles} from '../../styles/mainStyle';
+
+import LogOut from '../shared/logOut';
 import Loading from '../shared/loading';
 import Review from '../shared/review';
-import {Styles} from '../../styles/mainStyle';
-import UserController from '../../controllers/userController';
 
 const _storageService = new StorageService();
 const _userController = new UserController();
+const _methods = new Methods();
 
 export default class UserView extends Component {
   constructor(props) {
@@ -19,6 +23,7 @@ export default class UserView extends Component {
       id: '',
       userToken: '',
       user: [],
+      user_reviews: [],
     };
   }
 
@@ -35,26 +40,31 @@ export default class UserView extends Component {
       this.state.userToken,
     );
 
-    this.saveFavourites(user.favourite_locations);
+    await this.saveFavourites(user.favourite_locations);
+    await this.saveReviews(user.reviews);
+
+    this.getReviews();
+
     this.setState({
       isLoading: false,
       user: user,
     });
   };
 
+  getReviews = async () => {
+    let user_reviews = await _storageService.retrieveReviews();
+
+    this.setState({user_reviews: user_reviews});
+  };
+
+  saveReviews = async (reviews) => {
+    let review_ids = _methods.getReviewIds(reviews);
+    await _storageService.saveReviews(review_ids);
+  };
+
   saveFavourites = async (fav_locations) => {
-    let fav_ids = [];
-
-    fav_locations.forEach((fav) => {
-      fav_ids.push(fav.location_id);
-    });
-
-    try {
-      await AsyncStorage.setItem('@user_favourites', JSON.stringify(fav_ids));
-      console.log('Saved ' + JSON.stringify(fav_ids));
-    } catch (e) {
-      console.log(e);
-    }
+    let fav_ids = _methods.getFavouriteIds(fav_locations);
+    await _storageService.saveFavourites(fav_ids);
   };
 
   async componentDidMount() {
@@ -64,25 +74,31 @@ export default class UserView extends Component {
     await this.setState({id: id, userToken: userToken});
 
     await this.getUser();
+
     this._unsubscribe = this.props.navigation.addListener('focus', async () => {
       await this.getUser();
     });
   }
 
-  componentWillUnmount() {
-    this._unsubscribe();
+  async componentWillUnmount() {
+    await this._unsubscribe();
   }
 
   render() {
     const renderItem = ({item}) => (
-      <View style={Styles.container}>
-        <Text>Location: {item.location.location_name}</Text>
-        <Text>Location ID: {item.location.location_id}</Text>
+      <View style={Styles.container_favourite}>
+        <Text style={Styles.title}>
+          Location: {item.location.location_name}
+        </Text>
+        <Text style={Styles.subtitle}>
+          Location ID: {item.location.location_id}
+        </Text>
         <Review
           review={item.review}
           location_id={item.location.location_id}
           userToken={this.state.userToken}
           navigation={this.props.navigation}
+          user_reviews={this.state.user_reviews}
         />
       </View>
     );
@@ -95,19 +111,21 @@ export default class UserView extends Component {
       );
     } else {
       return (
-        <View>
-          <ScrollView>
-            <LogOut navigation={this.props.navigation} />
+        <ScrollView style={Styles.bg}>
+          <LogOut navigation={this.props.navigation} />
+          <View style={Styles.container}>
             <Button
               title="Update User Information"
               onPress={this.handleUpdateButton}>
               Update User Information
             </Button>
-            <Text>User Id: {this.state.user.user_id}</Text>
-            <Text>First Name: {this.state.user.first_name}</Text>
-            <Text>Last Name: {this.state.user.last_name}</Text>
-            <Text>E-Mail: {this.state.user.email}</Text>
-            <Text>Reviews Made:</Text>
+
+            <Text style={Styles.title}>
+              Name: {this.state.user.first_name} {this.state.user.last_name}
+            </Text>
+            <Text style={Styles.title}>E-Mail: {this.state.user.email}</Text>
+            <Text style={Styles.title}>User Id: {this.state.user.user_id}</Text>
+            <Text style={Styles.title}>Reviews Made:</Text>
             <FlatList
               data={this.state.user.reviews}
               renderItem={renderItem}
@@ -119,8 +137,8 @@ export default class UserView extends Component {
               renderItem={renderItem}
               keyExtractor={(item) => item.review.review_id}
             />
-          </ScrollView>
-        </View>
+          </View>
+        </ScrollView>
       );
     }
   }
