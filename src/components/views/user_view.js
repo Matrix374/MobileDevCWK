@@ -125,13 +125,17 @@ export default class UserView extends Component {
             </Text>
             <Text style={Styles.title}>E-Mail: {this.state.user.email}</Text>
             <Text style={Styles.title}>User Id: {this.state.user.user_id}</Text>
+          </View>
+          <View style={Styles.container}>
             <Text style={Styles.title}>Reviews Made:</Text>
             <FlatList
               data={this.state.user.reviews}
               renderItem={renderItem}
               keyExtractor={(item) => item.review.review_id}
             />
-            <Text>Reviews Liked:</Text>
+          </View>
+          <View style={Styles.container}>
+            <Text style={Styles.title}>Reviews Liked:</Text>
             <FlatList
               data={this.state.user.liked_reviews}
               renderItem={renderItem}

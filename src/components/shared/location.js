@@ -31,7 +31,7 @@ export default class Location extends Component {
       <View style={Styles.location_detail}>
         <Image
           style={Styles.image}
-          source={this.state.location.photo_path}></Image>
+          source={{uri: this.state.location.photo_path}}></Image>
         <Text style={Styles.title}>
           {this.state.location.location_name}{' '}
           {this.state.favourite ? '* FAVOURITE *' : ''}

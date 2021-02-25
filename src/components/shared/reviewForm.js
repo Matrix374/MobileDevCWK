@@ -143,6 +143,9 @@ export default class ReviewForm extends Component {
     }
 
     console.log(errors.toString());
+    if(errors.length == 0){
+      return null;
+    }
     return errors;
   };
 
