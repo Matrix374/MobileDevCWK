@@ -1,5 +1,6 @@
 import React, {Component, useState} from 'react';
 import {View, Text, TextInput, Button, ScrollView, Alert} from 'react-native';
+import profanities from '../../etc/profanityList';
 import StorageService from '../../lib/storage_service';
 import Camera from './camera';
 
@@ -114,38 +115,42 @@ export default class ReviewForm extends Component {
     if (this.isReviewBodyValid(input)) this.setState({review_body: input});
   };
 
-  checkErrors = async () => {
-    let foundError = false;
-
-    let ratings = [
-      this.state.quality_rating,
-      this.state.price_rating,
-      this.state.clenliness_rating,
-      this.state.overall_rating
-    ];
-
-    //ToDo: Change Placeholder Error Validation
-    //the error will not be recorded if there's no error on the ratings side
-    if (this.state.review_body === '') {
-      console.log('Review Body Error')
-      foundError = true;
-    }
-
-    ratings.forEach(async (rating, i) => {
-      if (!this.isRatingValid(rating)) {
-        foundError = true;
-        console.log('Rating Error, Rating # ' + i);
-        return;
+  checkReviewBodyForProfanities = () => {
+    body = this.state.review_body.toLowerCase();
+    let foundProfanity = false;
+    profanities.forEach((word) => {
+      if (body.includes(word) === true) {
+        foundProfanity = true;
       }
     });
 
-    console.log("Found Error? " + foundError);
-    return foundError;
+    return foundProfanity;
   };
 
-  handleSubmitButtonClick = async() => {
-    if (this.checkErrors()) {
-      //DoStuff
+  checkErrors = () => {
+    let errors = [];
+
+    if (this.checkReviewBodyForProfanities() === true) {
+      errors.push('Review Body Error: Profanities Found');
+    }
+
+    if (
+      !this.state.quality_rating ||
+      !this.state.price_rating ||
+      !this.state.clenliness_rating ||
+      !this.state.overall_rating
+    ) {
+      errors.push('Rating Error: Field Empty');
+    }
+
+    console.log(errors.toString());
+    return errors;
+  };
+
+  handleSubmitButtonClick = async () => {
+    let errors = this.checkErrors();
+
+    if (!errors) {
       console.log('Packaging Submission');
       this.setState({
         review: {
@@ -166,6 +171,15 @@ export default class ReviewForm extends Component {
     } else {
       //Submission Error
       console.log('Submission Error');
+      let errorString = '';
+
+      errors.forEach((e) => {
+        errorString += e + '\n';
+      });
+
+      console.log(errorString)
+
+      Alert.alert('Errors Found: \n' + errorString);
     }
   };
 
