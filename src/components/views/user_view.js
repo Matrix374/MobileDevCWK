@@ -30,13 +30,16 @@ export default class UserView extends Component {
   };
 
   getUser = async () => {
-    let user = await _userController.GetUserAsync(this.state.id, this.state.userToken)
+    let user = await _userController.GetUserAsync(
+      this.state.id,
+      this.state.userToken,
+    );
 
     this.saveFavourites(user.favourite_locations);
     this.setState({
       isLoading: false,
-      user: user
-    })
+      user: user,
+    });
   };
 
   saveFavourites = async (fav_locations) => {
@@ -94,6 +97,7 @@ export default class UserView extends Component {
       return (
         <View>
           <ScrollView>
+            <LogOut navigation={this.props.navigation} />
             <Button
               title="Update User Information"
               onPress={this.handleUpdateButton}>
