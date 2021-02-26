@@ -170,13 +170,11 @@ export default class ReviewForm extends Component {
       if (this.state.review_id) {
         console.log('Updating...');
         if (this.patchReview() === true) {
-          Alert.alert('Update Success');
           this.props.navigation.goBack();
         }
       } else {
         console.log('Submitting...');
         if (this.postReview() === true) {
-          Alert.alert('Submit Success');
           this.props.navigation.goBack();
         }
       }
@@ -213,8 +211,10 @@ export default class ReviewForm extends Component {
 
       if (response.ok) {
         console.log(response.status);
+        Alert.alert('Review Created');
         return true;
       } else {
+        Alert.alert(response.status + ':' + response.statusText);
         throw new Error(response.status);
       }
     } catch (e) {
@@ -243,8 +243,10 @@ export default class ReviewForm extends Component {
 
       if (response.ok) {
         console.log(response.status);
+        Alert.alert('Review Updated');
         return true;
       } else {
+        Alert.alert(response.status + ':' + response.statusText);
         throw new Error(response.status);
       }
     } catch (e) {
@@ -288,6 +290,9 @@ export default class ReviewForm extends Component {
       if (response.ok) {
         console.log('Photo Deleted');
         this.setState({hasPhoto: false});
+        return true;
+      } else {
+        Alert.alert(response.status + ':' + response.statusText);
       }
     } catch (e) {
       console.error(e);

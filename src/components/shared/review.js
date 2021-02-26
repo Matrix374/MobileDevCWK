@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, View, Text, Image} from 'react-native';
+import {Button, View, Text, Image, Alert} from 'react-native';
 import ReviewController from '../../controllers/reviewController';
 import {Styles} from '../../styles/mainStyle';
 
@@ -82,6 +82,7 @@ export default class Review extends Component {
   handleDeleteReviewButton = async () => {
     //Are you sure?
     this.deleteReview();
+    Alert.alert('Review Deleted')
     this.props.navigation.goBack();
     //Reset View
   };
