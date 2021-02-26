@@ -7,4 +7,6 @@
 3. Run Emulator
 4. Run `npx react-native run-android` in the cmd
 
-The App relies on the [CoffidaServer](https://github.com/ash-williams/coffida_server)
+This App relies on the [CoffidaServer](https://github.com/ash-williams/coffida_server)
+
+Style guide used: [JS Standard](https://github.com/standard/standard)
