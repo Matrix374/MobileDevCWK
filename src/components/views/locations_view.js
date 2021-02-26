@@ -62,6 +62,7 @@ export default class LocationsView extends Component {
     );
     await this.saveFavourites(user.favourite_locations);
     await this.saveReviews(user.reviews);
+    await this.saveLikes(user.liked_reviews);
 
     let favourites = await _storageService.retrieveFavourites();
     this.setState({favourites: favourites});
@@ -71,6 +72,12 @@ export default class LocationsView extends Component {
     let review_ids = _methods.getReviewIds(reviews);
     console.log('review ids: ' + review_ids);
     await _storageService.saveReviews(review_ids);
+  };
+
+  saveLikes = async (liked_reviews) => {
+    let review_ids = _methods.getReviewIds(liked_reviews);
+    console.log('liked review ids: ' + review_ids);
+    await _storageService.saveLikes(review_ids);
   };
 
   saveFavourites = async (fav_locations) => {

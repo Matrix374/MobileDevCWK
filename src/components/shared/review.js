@@ -16,13 +16,21 @@ export default class Review extends Component {
   }
 
   getReview = async () => {
-    try {
-      console.log('trying to retrieve reviews');
-      let review = this.props.review;
-      await this.setState({review: review});
-    } catch (e) {
-      throw new Error(e);
-    }
+    let review = this.props.review;
+    let userToken = this.props.userToken;
+    let loc_id = this.props.location_id;
+    let like = this.props.like;
+
+    await this.setState({
+      review: review,
+      userToken: userToken,
+      location_id: loc_id,
+      like: like,
+    });
+
+    console.log('Like ' + this.state.review.review_id + '? ' + this.state.like);
+
+    await this.getPhoto();
   };
 
   getPhoto = async () => {
@@ -194,13 +202,13 @@ export default class Review extends Component {
 
   async componentDidMount() {
     await this.getReview();
+    this._unsubscribe = this.props.navigation.addListener('focus', async () => {
+      await this.getReview();
+    });
+  }
 
-    let userToken = this.props.userToken;
-    let loc_id = this.props.location_id;
-
-    await this.setState({userToken: userToken, location_id: loc_id});
-
-    await this.getPhoto();
+  async componentWillUnmount() {
+    await this._unsubscribe();
   }
 
   render() {

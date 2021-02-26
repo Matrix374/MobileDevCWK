@@ -21,6 +21,7 @@ export default class LocationDetail extends Component {
       isLoading: true,
       location: [],
       user_reviews: [],
+      user_likes: [],
     };
   }
 
@@ -29,7 +30,7 @@ export default class LocationDetail extends Component {
     this.props.navigation.navigate('ReviewCreate', {
       location_id: this.state.location_id,
       review_id: null,
-    })
+    });
   };
 
   getData = async () => {
@@ -60,6 +61,12 @@ export default class LocationDetail extends Component {
     let user_reviews = await _storageService.retrieveReviews();
 
     this.setState({user_reviews: user_reviews});
+  };
+
+  getLikes = async () => {
+    let user_likes = await _storageService.retrieveLikes();
+
+    this.setState({user_likes: user_likes});
   };
 
   handleFavouriteButton = async () => {
@@ -133,10 +140,12 @@ export default class LocationDetail extends Component {
 
     this.getData();
     this.getReviews();
+    this.getLikes();
 
     this._unsubscribe = this.props.navigation.addListener('focus', async () => {
       this.getData();
       this.getReviews();
+      this.getLikes();
     });
   }
 
@@ -153,6 +162,7 @@ export default class LocationDetail extends Component {
           userToken={this.state.userToken}
           navigation={this.props.navigation}
           user_reviews={this.state.user_reviews}
+          like={this.state.user_likes.includes(item.review_id)}
         />
       </View>
     );

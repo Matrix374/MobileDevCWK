@@ -24,6 +24,7 @@ export default class UserView extends Component {
       userToken: '',
       user: [],
       user_reviews: [],
+      user_likes: [],
     };
   }
 
@@ -44,11 +45,18 @@ export default class UserView extends Component {
     await this.saveReviews(user.reviews);
 
     this.getReviews();
+    this.getLikes();
 
     this.setState({
       isLoading: false,
       user: user,
     });
+  };
+
+  getLikes = async () => {
+    let user_likes = await _storageService.retrieveLikes();
+
+    this.setState({user_likes: user_likes});
   };
 
   getReviews = async () => {
@@ -87,6 +95,12 @@ export default class UserView extends Component {
   render() {
     const renderItem = ({item}) => (
       <View style={Styles.item}>
+        {console.log(
+          'Liked ' +
+            item.review.review_id +
+            '? ' +
+            this.state.user_likes.includes(item.review.review_id),
+        )}
         <Text style={Styles.title}>
           Location: {item.location.location_name}
         </Text>
@@ -99,6 +113,7 @@ export default class UserView extends Component {
           userToken={this.state.userToken}
           navigation={this.props.navigation}
           user_reviews={this.state.user_reviews}
+          like={this.state.user_likes.includes(item.review.review_id)}
         />
       </View>
     );

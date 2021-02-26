@@ -39,6 +39,15 @@ export default class StorageService {
     }
   };
 
+  saveLikes = async (likes) => {
+    try {
+      await AsyncStorage.setItem('@user_likes', JSON.stringify(likes));
+      console.log('Saved Likes: ' + JSON.stringify(likes));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   retrieveFavourites = async () => {
     try {
       let json = await AsyncStorage.getItem('@user_favourites');
@@ -56,6 +65,16 @@ export default class StorageService {
       return JSON.parse(json);
     } catch (e) {
       throw new Error('Review Retrieval Error: ' + e);
+    }
+  };
+
+  retrieveLikes = async () => {
+    try {
+      let json = await AsyncStorage.getItem('@user_likes');
+      console.log('from lib, likes retrieved: ' + JSON.stringify(json));
+      return JSON.parse(json);
+    } catch (e) {
+      throw new Error('Likes Retrieval Error: ' + e);
     }
   };
 
