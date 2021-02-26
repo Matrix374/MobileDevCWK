@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList, Button, ToastAndroid} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {View, FlatList, Button, Alert} from 'react-native';
 import {Styles} from '../../styles/mainStyle';
 
 import StorageService from '../../lib/storage_service';
+import LocationController from '../../controllers/locationController';
 import Loading from '../shared/loading';
 import Location from '../shared/location';
 import Review from '../shared/review';
 
 const _storageService = new StorageService();
+const _locationController = new LocationController();
 
 export default class LocationDetail extends Component {
   constructor(props) {
@@ -35,18 +36,10 @@ export default class LocationDetail extends Component {
 
   getData = async () => {
     try {
-      let response = await fetch(
-        'http://10.0.2.2:3333/api/1.0.0/location/' + this.state.location_id,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization': this.state.userToken,
-          },
-        },
+      let json = await _locationController.getLocationData(
+        this.state.location_id,
+        this.state.userToken,
       );
-
-      let json = await response.json();
 
       this.setState({
         isLoading: false,
@@ -74,30 +67,24 @@ export default class LocationDetail extends Component {
 
     if (this.state.favourite) {
       await this.deleteFavourite();
-      this.setState({favourite: false});
     } else {
       await this.postFavourite();
-      this.setState({favourite: true});
     }
   };
 
   postFavourite = async () => {
     try {
-      let response = await fetch(
-        'http://10.0.2.2:3333/api/1.0.0/location/' +
-          this.state.location_id.toString() +
-          '/favourite',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization': this.state.userToken,
-          },
-        },
+      let response = await _locationController.postLocationFavourite(
+        this.state.location_id,
+        this.state.userToken,
       );
 
       if (response.ok) {
         console.log('Favourited ' + this.state.location.location_name);
+        this.setState({favourite: true});
+        Alert.alert('Favourited ' + this.state.location.location_name);
+      } else {
+        Alert.alert('Error: ' + response.status + ':' + response.statusText);
       }
     } catch (e) {
       console.log(e);
@@ -106,21 +93,17 @@ export default class LocationDetail extends Component {
 
   deleteFavourite = async () => {
     try {
-      let response = await fetch(
-        'http://10.0.2.2:3333/api/1.0.0/location/' +
-          this.state.location_id +
-          '/favourite',
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization': this.state.userToken,
-          },
-        },
+      let response = await _locationController.deleteLocationFavourite(
+        this.state.location_id,
+        this.state.userToken,
       );
 
       if (response.ok) {
-        console.log('Un-Favourited');
+        console.log('Un-Favourited ' + this.state.location.location_name);
+        this.setState({favourite: false});
+        Alert.alert('Un-Favourited ' + this.state.location.location_name);
+      } else {
+        Alert.alert('Error: ' + response.status + ':' + response.statusText);
       }
     } catch (e) {
       console.log(e);
