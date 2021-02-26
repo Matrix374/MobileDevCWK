@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View } from 'react-native'
 import StorageService from '../../lib/storage_service'
+import { Styles } from '../../styles/mainStyle'
 import ReviewForm from '../shared/reviewForm'
 
 const _storageService = new StorageService()
@@ -35,7 +36,7 @@ export default class ReviewCreate extends Component {
 
   render () {
     return (
-      <View>
+      <View style={Styles.bg}>
         <ReviewForm location_id={this.props.route.params.location_id} />
       </View>
     )

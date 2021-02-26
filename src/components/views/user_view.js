@@ -86,7 +86,7 @@ export default class UserView extends Component {
 
   render() {
     const renderItem = ({item}) => (
-      <View style={Styles.container_favourite}>
+      <View style={Styles.item}>
         <Text style={Styles.title}>
           Location: {item.location.location_name}
         </Text>
@@ -113,7 +113,7 @@ export default class UserView extends Component {
       return (
         <ScrollView style={Styles.bg}>
           <LogOut navigation={this.props.navigation} />
-          <View style={Styles.container}>
+          <View style={Styles.item_favourite}>
             <Button
               title="Update User Information"
               onPress={this.handleUpdateButton}>
@@ -127,7 +127,7 @@ export default class UserView extends Component {
             <Text style={Styles.title}>User Id: {this.state.user.user_id}</Text>
           </View>
           <View style={Styles.container}>
-            <Text style={Styles.title}>Reviews Made:</Text>
+            <Text style={Styles.title}>Reviews Made</Text>
             <FlatList
               data={this.state.user.reviews}
               renderItem={renderItem}
@@ -135,7 +135,7 @@ export default class UserView extends Component {
             />
           </View>
           <View style={Styles.container}>
-            <Text style={Styles.title}>Reviews Liked:</Text>
+            <Text style={Styles.title}>Reviews Liked</Text>
             <FlatList
               data={this.state.user.liked_reviews}
               renderItem={renderItem}

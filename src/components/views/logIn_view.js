@@ -4,6 +4,7 @@ import Methods from '../../lib/methods';
 import FormErrorsEnum from '../../enums/formErrorEnums';
 import UserController from '../../controllers/userController';
 import StorageService from '../../lib/storage_service';
+import {Styles} from '../../styles/mainStyle';
 
 const _methods = new Methods();
 const _userController = new UserController();
@@ -84,33 +85,59 @@ export default class LogInView extends Component {
     const navigation = this.props.navigation;
 
     return (
-      <View>
-        <Text>{this.state.error ? this.handleError() : ''}</Text>
+      <View style={Styles.container}>
+        <View></View>
+        <View
+          style={{flex: 1, alignContent: 'center', justifyContent: 'center'}}>
+          <View
+            style={{
+              padding: 60,
+              flexDirection: 'column',
+              alignContent: 'space-between',
+            }}>
+            <Text style={Styles.error}>
+              {this.state.error ? this.handleError() : ''}
+            </Text>
+            <TextInput
+              placeholder="Enter Email"
+              style={{
+                backgroundColor: 'white',
+                fontSize: 18,
+              }}
+              onChangeText={this.handleEmailChange}
+              value={this.state.email}
+            />
+            <TextInput
+              placeholder="Enter Password"
+              style={{
+                backgroundColor: 'white',
+                fontSize: 18,
+              }}
+              onChangeText={this.handlePasswordChange}
+              value={this.state.password}
+              secureTextEntry={true}
+            />
+          </View>
 
-        <TextInput
-          placeholder="Enter Email"
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={this.handleEmailChange}
-          value={this.state.email}
-        />
-        <TextInput
-          placeholder="Enter Password"
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={this.handlePasswordChange}
-          value={this.state.password}
-        />
-
-        <Button
-          title="Log-In"
-          color={this.state.buttonStyle}
-          onPress={this.handleLogInButtonClick}>
-          Log-In
-        </Button>
-        <Button
-          color={this.state.buttonStyle}
-          title="Register"
-          onPress={() => navigation.navigate('Register')}
-        />
+          <View
+            style={{
+              flexDirection: 'column',
+              padding: 20,
+              alignContent: 'space-between',
+            }}>
+            <Button
+              title="Log-In"
+              color="#d46f4d"
+              onPress={this.handleLogInButtonClick}>
+              Log-In
+            </Button>
+            <Button
+              color="#d46f4d"
+              title="Register"
+              onPress={() => navigation.navigate('Register')}
+            />
+          </View>
+        </View>
       </View>
     );
   }

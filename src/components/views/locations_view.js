@@ -102,8 +102,8 @@ export default class LocationsView extends Component {
       <View
         style={
           this.state.favourites.includes(item.location_id)
-            ? Styles.container_favourite
-            : Styles.container
+            ? Styles.item_favourite
+            : Styles.item
         }>
         <TouchableOpacity
           onPress={() => {
@@ -132,7 +132,7 @@ export default class LocationsView extends Component {
       );
     } else {
       return (
-        <View style={Styles.bg}>
+        <View style={Styles.container}>
           <FlatList
             data={this.state.locations}
             renderItem={renderItem}

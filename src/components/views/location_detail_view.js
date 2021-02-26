@@ -29,7 +29,7 @@ export default class LocationDetail extends Component {
     this.props.navigation.navigate('ReviewCreate', {
       location_id: this.state.location_id,
       review_id: null,
-    });
+    })
   };
 
   getData = async () => {
@@ -146,7 +146,7 @@ export default class LocationDetail extends Component {
 
   render() {
     const renderItem = ({item}) => (
-      <View style={Styles.container}>
+      <View style={Styles.item}>
         <Review
           review={item}
           location_id={this.state.location_id}
@@ -169,17 +169,19 @@ export default class LocationDetail extends Component {
           <FlatList
             ListHeaderComponent={
               <>
-                <Location location={this.state.location} />
-                <Button
-                  color="red"
-                  title="Leave a Review"
-                  onPress={this.handleReviewButton}>
-                  Leave a Review
-                </Button>
-                <Button
-                  color="red"
-                  title={this.state.favourite ? 'Un-Favourite' : 'Favourite'}
-                  onPress={this.handleFavouriteButton}></Button>
+                <View style={Styles.item}>
+                  <Location location={this.state.location} />
+                  <Button
+                    color="red"
+                    title="Leave a Review"
+                    onPress={this.handleReviewButton}>
+                    Leave a Review
+                  </Button>
+                  <Button
+                    color="red"
+                    title={this.state.favourite ? 'Un-Favourite' : 'Favourite'}
+                    onPress={this.handleFavouriteButton}></Button>
+                </View>
               </>
             }
             data={this.state.location.location_reviews}

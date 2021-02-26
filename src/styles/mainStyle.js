@@ -1,52 +1,49 @@
 import { StyleSheet } from 'react-native'
 
+const primary = '#d46f4d'
+const secondary = '#ffbf66'
+const darkPrimary = '#430c05'
+const darkBackground = '#00353f'
+const background = '#08c5d1'
 export const Styles = StyleSheet.create({
-  tab_button: {
-    fontSize: 16,
-    justifyContent: 'space-between'
+  bg: {
+    flex: 1,
+    backgroundColor: background
+  },
+  item: {
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    backgroundColor: primary,
+    borderRadius: 20
+  },
+  item_favourite: {
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    backgroundColor: secondary,
+    borderRadius: 20
   },
   title: {
     fontSize: 24
   },
   subtitle: {
-    fontSize: 16
+    fontSize: 18
   },
   subtitle_favourite: {
-    fontSize: 16,
-    color: 'red'
-  },
-  button: {
-    color: 'red'
-  },
-  buttonPress: {
-    color: '#130e0b'
-  },
-  logOut_button: {
-    color: '#4a1a1a'
+    fontSize: 18,
+    color: darkPrimary
   },
   container: {
+    backgroundColor: '#08c5d1',
     flex: 1,
-    justifyContent: 'space-between',
-    backgroundColor: '#724620',
-    padding: 20,
-    margin: 10
+    width: '100%',
+    alignContent: 'center'
   },
-  container_favourite: {
-    flex: 1,
-    justifyContent: 'space-between',
-    backgroundColor: '#ac835a',
-    padding: 20,
-    margin: 10
-  },
-  location_detail: {
-    flex: 1,
-    justifyContent: 'space-between',
-    backgroundColor: '#ac835a',
-    padding: 20,
-    margin: 10
-  },
-  bg: {
-    backgroundColor: '#4a1a1a'
+  itemImage: {
+    display: 'flex',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   preview: {
     flex: 1,
@@ -54,16 +51,20 @@ export const Styles = StyleSheet.create({
     alignItems: 'center'
   },
   image: {
-    width: 100,
-    height: 100
-  },
-  image_thumb: {
+    resizeMode: 'contain',
+    height: 50,
     width: 50,
-    height: 50
+    alignSelf: 'flex-end'
+  },
+  error: {
+    fontSize: 16,
+    color: darkBackground,
+    fontWeight: 'bold'
   },
   review_body: {
-    backgroundColor: '#ac835a',
-    padding: 20,
-    margin: 10
+    backgroundColor: 'white'
+  },
+  rating: {
+    fontSize: 24
   }
 })

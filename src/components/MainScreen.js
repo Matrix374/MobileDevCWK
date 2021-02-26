@@ -18,9 +18,24 @@ export default class MainScreen extends Component {
 
   render () {
     return (
-      <Tab.Navigator>
-        <Tab.Screen name='HomeScreen' component={HomeScreen} />
-        <Tab.Screen name='UserScreen' component={UserScreen} />
+      <Tab.Navigator
+        tabBarOptions={{
+          style: { backgroundColor: '#f4511e' },
+          labelStyle: { fontSize: 24, fontWeight: 'bold' },
+          activeTintColor: 'white',
+          inactiveTintColor: 'black'
+        }}
+      >
+        <Tab.Screen
+          name='HomeScreen'
+          component={HomeScreen}
+          options={{ title: 'Home' }}
+        />
+        <Tab.Screen
+          name='UserScreen'
+          component={UserScreen}
+          options={{ title: 'User' }}
+        />
       </Tab.Navigator>
     )
   }

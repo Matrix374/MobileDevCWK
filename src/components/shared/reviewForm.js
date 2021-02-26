@@ -1,5 +1,6 @@
 import React, {Component, useState} from 'react';
 import {View, Text, TextInput, Button, ScrollView, Alert} from 'react-native';
+import {Styles} from '../../styles/mainStyle';
 import profanities from '../../etc/profanityList';
 import StorageService from '../../lib/storage_service';
 
@@ -115,7 +116,7 @@ export default class ReviewForm extends Component {
   };
 
   checkReviewBodyForProfanities = () => {
-    body = this.state.review_body.toLowerCase();
+    let body = this.state.review_body.toLowerCase();
     let foundProfanity = false;
     profanities.forEach((word) => {
       if (body.includes(word) === true) {
@@ -143,7 +144,7 @@ export default class ReviewForm extends Component {
     }
 
     console.log(errors.toString());
-    if(errors.length == 0){
+    if (errors.length == 0) {
       return null;
     }
     return errors;
@@ -179,7 +180,7 @@ export default class ReviewForm extends Component {
         errorString += e + '\n';
       });
 
-      console.log(errorString)
+      console.log(errorString);
 
       Alert.alert('Errors Found: \n' + errorString);
     }
@@ -361,10 +362,11 @@ export default class ReviewForm extends Component {
       <View>{this.state.hasPhoto === true ? DeletePhoto : TakePhoto}</View>
     );
     return (
-      <View>
-        <ScrollView>
-          <Text>Quality Rating:</Text>
+      <ScrollView>
+        <View style={Styles.item}>
+          <Text style={Styles.title}>Quality Rating:</Text>
           <TextInput
+            style={Styles.rating}
             placeholder="(Rate 1-5)"
             onChangeText={(input) => {
               this.handleQualityRatingInput(input);
@@ -372,13 +374,12 @@ export default class ReviewForm extends Component {
             value={this.state.quality_rating}
           />
           {!!this.state.quality_rating_error && (
-            <Text style={{color: 'red'}}>
-              {this.state.quality_rating_error}
-            </Text>
+            <Text style={Styles.error}>{this.state.quality_rating_error}</Text>
           )}
 
-          <Text>Price Rating:</Text>
+          <Text style={Styles.title}>Price Rating:</Text>
           <TextInput
+            style={Styles.rating}
             placeholder="(Rate 1-5)"
             onChangeText={(input) => {
               this.handlePriceRatingInput(input);
@@ -386,11 +387,12 @@ export default class ReviewForm extends Component {
             value={this.state.price_rating}
           />
           {!!this.state.price_rating_error && (
-            <Text style={{color: 'red'}}>{this.state.price_rating_error}</Text>
+            <Text style={Styles.error}>{this.state.price_rating_error}</Text>
           )}
 
-          <Text>Cleanliness Rating:</Text>
+          <Text style={Styles.title}>Cleanliness Rating:</Text>
           <TextInput
+            style={Styles.rating}
             placeholder="(Rate 1-5)"
             onChangeText={(input) => {
               this.handleCleanlinessRatingInput(input);
@@ -398,13 +400,14 @@ export default class ReviewForm extends Component {
             value={this.state.clenliness_rating}
           />
           {!!this.state.clenliness_rating_error && (
-            <Text style={{color: 'red'}}>
+            <Text style={Styles.error}>
               {this.state.clenliness_rating_error}
             </Text>
           )}
 
-          <Text>Overall Rating:</Text>
+          <Text style={Styles.title}>Overall Rating:</Text>
           <TextInput
+            style={Styles.rating}
             placeholder="(Rate 1-5)"
             onChangeText={(input) => {
               this.handleOverallRatingInput(input);
@@ -412,13 +415,12 @@ export default class ReviewForm extends Component {
             value={this.state.overall_rating}
           />
           {!!this.state.overall_rating_error && (
-            <Text style={{color: 'red'}}>
-              {this.state.overall_rating_error}
-            </Text>
+            <Text style={Styles.error}>{this.state.overall_rating_error}</Text>
           )}
 
-          <Text>Comments:</Text>
+          <Text style={Styles.title}>Comments:</Text>
           <TextInput
+            style={Styles.review_body}
             placeholder={'Enter Comment... (maxLength: ' + maxChar + ')'}
             multiline={true}
             parseIntOfLines={4}
@@ -430,14 +432,16 @@ export default class ReviewForm extends Component {
           />
 
           {this.state.review_id ? EditComponents : null}
+        </View>
 
+        <View style={{paddingHorizontal:75, borderRadius: 200}}>
           <Button
             title={this.state.review_id ? 'Update' : 'Submit'}
             onPress={this.handleSubmitButtonClick}>
             Submit
           </Button>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     );
   }
 }
