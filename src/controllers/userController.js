@@ -1,5 +1,3 @@
-import { Alert } from 'react-native'
-
 const url = 'http://10.0.2.2:3333/api/1.0.0/user/'
 
 export default class UserController {
@@ -55,7 +53,7 @@ export default class UserController {
       }
     } catch (e) {
       console.error(e)
-      Alert.alert('There seemed to be an error: ' + e)
+      console.error('There seemed to be an error: ' + e)
     }
   }
 

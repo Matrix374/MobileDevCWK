@@ -1,5 +1,3 @@
-import {Alert} from 'react-native';
-
 const url = 'http://10.0.2.2:3333/api/1.0.0/location/';
 
 export default class LocationController {
@@ -14,7 +12,7 @@ export default class LocationController {
       });
 
       if (response.ok) return await response.json();
-      else Alert.alert('Error: Location Not Found');
+      else return null;
     } catch (e) {
       throw new Error('GET Location Failed: ' + e);
     }
