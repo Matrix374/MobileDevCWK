@@ -9,7 +9,7 @@ const Stack = createStackNavigator()
 class App extends Component {
   render () {
     return (
-      <NavigationContainer ref='Root'>
+      <NavigationContainer>
         <Stack.Navigator
           headerMode='none'
         >

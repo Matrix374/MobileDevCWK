@@ -11,10 +11,6 @@ import Camera from './shared/camera'
 const Stack = createStackNavigator()
 
 export default class Home extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   render () {
     return (
       <Stack.Navigator>
