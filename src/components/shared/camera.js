@@ -3,8 +3,10 @@ import {View, Button, Alert} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import {Styles} from '../../styles/mainStyle';
 import StorageService from '../../lib/storage_service';
+import ReviewController from '../../controllers/reviewController';
 
 const _storageService = new StorageService();
+const _reviewController = new ReviewController();
 
 export default class Camera extends Component {
   constructor(props) {
@@ -31,28 +33,20 @@ export default class Camera extends Component {
           '/photo with AUTH: ' +
           this.state.userToken,
       );
-      let url =
-        'http://10.0.2.2:3333/api/1.0.0/location/' +
-        this.state.location_id +
-        '/review/' +
-        this.state.review_id +
-        '/photo';
 
       try {
-        let response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'image/jpeg',
-            'X-Authorization': this.state.userToken,
-          },
-          body: data,
-        });
+        let response = await _reviewController.postReviewPhoto(
+          this.state.location_id,
+          this.state.review_id,
+          data,
+          this.state.userToken,
+        );
 
         if (response.ok) {
           this.props.navigation.goBack();
           Alert.alert('Photo Uploaded');
         } else {
-          Alert.alert("Error: " + response.status.toString());
+          Alert.alert('Error: ' + response.status.toString());
         }
       } catch (e) {
         console.error(e);

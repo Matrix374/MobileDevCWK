@@ -3,8 +3,11 @@ import {View, Text, TextInput, Button, ScrollView, Alert} from 'react-native';
 import {Styles} from '../../styles/mainStyle';
 import profanities from '../../etc/profanityList';
 import StorageService from '../../lib/storage_service';
+import ReviewController from '../../controllers/reviewController';
 
 const _storageService = new StorageService();
+const _reviewController = new ReviewController();
+
 const maxChar = 240;
 const maxRating = 5;
 
@@ -166,10 +169,16 @@ export default class ReviewForm extends Component {
       });
       if (this.state.review_id) {
         console.log('Updating...');
-        this.patchReview();
+        if (this.patchReview() === true) {
+          Alert.alert('Update Success');
+          this.props.navigation.goBack();
+        }
       } else {
         console.log('Submitting...');
-        this.postReview();
+        if (this.postReview() === true) {
+          Alert.alert('Submit Success');
+          this.props.navigation.goBack();
+        }
       }
     } else {
       //Submission Error
@@ -196,23 +205,15 @@ export default class ReviewForm extends Component {
           '/review with AUTH:' +
           this.state.userToken,
       );
-      let response = await fetch(
-        'http://10.0.2.2:3333/api/1.0.0/location/' +
-          this.state.location_id +
-          '/review',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization': this.state.userToken,
-          },
-          body: JSON.stringify(this.state.review),
-        },
+      let response = await _reviewController.postReview(
+        this.state.location_id,
+        JSON.stringify(this.state.review),
+        this.state.userToken,
       );
 
       if (response.ok) {
         console.log(response.status);
-        this.setState({success: true});
+        return true;
       } else {
         throw new Error(response.status);
       }
@@ -233,24 +234,16 @@ export default class ReviewForm extends Component {
           ' with AUTH:' +
           this.state.userToken,
       );
-      let response = await fetch(
-        'http://10.0.2.2:3333/api/1.0.0/location/' +
-          this.state.location_id +
-          '/review/' +
-          this.state.review_id,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization': this.state.userToken,
-          },
-          body: JSON.stringify(this.state.review),
-        },
+      let response = await _reviewController.patchReview(
+        this.state.location_id,
+        this.state.review_id,
+        JSON.stringify(this.state.review),
+        this.state.userToken,
       );
 
       if (response.ok) {
         console.log(response.status);
-        this.setState({success: true});
+        return true;
       } else {
         throw new Error(response.status);
       }
@@ -260,26 +253,16 @@ export default class ReviewForm extends Component {
   };
 
   checkPhoto = async () => {
-    let url =
-      'http://10.0.2.2:3333/api/1.0.0/location/' +
-      this.state.location_id +
-      '/review/' +
-      this.state.review_id +
-      '/photo';
-
     try {
-      let response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization': this.state.userToken,
-        },
-      });
+      let response = await _reviewController.checkReviewPhoto(
+        this.state.location_id,
+        this.state.review_id,
+        this.state.userToken,
+      );
 
       if (response.ok) {
         console.log('Photo Exists');
         this.setState({hasPhoto: true});
-        //save photo for display
       }
     } catch (e) {
       console.error(e);
@@ -295,21 +278,12 @@ export default class ReviewForm extends Component {
   };
 
   deletePhoto = async () => {
-    let url =
-      'http://10.0.2.2:3333/api/1.0.0/location/' +
-      this.state.location_id +
-      '/review/' +
-      this.state.review_id +
-      '/photo';
-
     try {
-      let response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization': this.state.userToken,
-        },
-      });
+      let response = await _reviewController.deleteReviewPhoto(
+        this.state.location_id,
+        this.state.review_id,
+        this.state.userToken,
+      );
 
       if (response.ok) {
         console.log('Photo Deleted');
@@ -434,7 +408,7 @@ export default class ReviewForm extends Component {
           {this.state.review_id ? EditComponents : null}
         </View>
 
-        <View style={{paddingHorizontal:75, borderRadius: 200}}>
+        <View style={{paddingHorizontal: 75, borderRadius: 200}}>
           <Button
             title={this.state.review_id ? 'Update' : 'Submit'}
             onPress={this.handleSubmitButtonClick}>

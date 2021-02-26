@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {Button, View, Text, Image} from 'react-native';
+import ReviewController from '../../controllers/reviewController';
 import {Styles} from '../../styles/mainStyle';
+
+const _reviewController = new ReviewController();
 
 export default class Review extends Component {
   constructor(props) {
@@ -34,29 +37,30 @@ export default class Review extends Component {
   };
 
   getPhoto = async () => {
-    let url =
-      'http://10.0.2.2:3333/api/1.0.0/location/' +
-      this.state.location_id +
-      '/review/' +
-      this.state.review.review_id +
-      '/photo';
-
     try {
-      console.log('Sending GET Request TO ' + url);
-      let response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization': this.state.userToken,
-        },
-      });
+      console.log(
+        'Sending GET request ' +
+          JSON.stringify(this.state.review) +
+          'TO http://10.0.2.2:3333/api/1.0.0/location/' +
+          this.state.location_id +
+          '/review/' +
+          this.state.review.review_id +
+          '/photo with AUTH:' +
+          this.state.userToken,
+      );
+      let response = await _reviewController.checkReviewPhoto(
+        this.state.location_id,
+        this.state.review.review_id,
+        this.state.userToken,
+      );
 
       if (response.ok) {
         console.log('Photo Exists');
         this.setState({hasPhoto: true});
-      }
-      else {
-        console.log('No Photos? ' + response.status + ':' + response.statusText)
+      } else {
+        console.log(
+          'No Photos? ' + response.status + ':' + response.statusText,
+        );
       }
     } catch (e) {
       console.error(e);
@@ -78,6 +82,7 @@ export default class Review extends Component {
   handleDeleteReviewButton = async () => {
     //Are you sure?
     this.deleteReview();
+    this.props.navigation.goBack();
     //Reset View
   };
 
@@ -101,19 +106,10 @@ export default class Review extends Component {
           '/like with AUTH:' +
           this.state.userToken,
       );
-      let response = await fetch(
-        'http://10.0.2.2:3333/api/1.0.0/location/' +
-          this.state.location_id +
-          '/review/' +
-          this.state.review.review_id +
-          '/like',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization': this.state.userToken,
-          },
-        },
+      let response = await _reviewController.postLikeReview(
+        this.state.location_id,
+        this.state.review.review_id,
+        this.state.userToken,
       );
 
       if (response.ok) {
@@ -131,7 +127,7 @@ export default class Review extends Component {
     //doStuff
     try {
       console.log(
-        'Sending POST request ' +
+        'Sending DELETE request ' +
           JSON.stringify(this.state.review) +
           'TO http://10.0.2.2:3333/api/1.0.0/location/' +
           this.state.location_id +
@@ -140,19 +136,11 @@ export default class Review extends Component {
           '/like with AUTH:' +
           this.state.userToken,
       );
-      let response = await fetch(
-        'http://10.0.2.2:3333/api/1.0.0/location/' +
-          this.state.location_id +
-          '/review/' +
-          this.state.review.review_id +
-          '/like',
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization': this.state.userToken,
-          },
-        },
+
+      let response = await _reviewController.deleteLikeReview(
+        this.state.location_id,
+        this.state.review.review_id,
+        this.state.userToken,
       );
 
       if (response.ok) {
@@ -178,23 +166,15 @@ export default class Review extends Component {
           ' with AUTH:' +
           this.state.userToken,
       );
-      let response = await fetch(
-        'http://10.0.2.2:3333/api/1.0.0/location/' +
-          this.state.location_id +
-          '/review/' +
-          this.state.review.review_id,
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization': this.state.userToken,
-          },
-        },
+      let response = await _reviewController.deleteReview(
+        this.state.location_id,
+        this.state.review.review_id,
+        this.state.userToken,
       );
 
       if (response.ok) {
         console.log(response.status);
-        this.setState({success: true});
+        return true
       } else {
         throw new Error(response.status);
       }
