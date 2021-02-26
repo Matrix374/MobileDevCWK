@@ -1,34 +1,34 @@
-import {Alert} from 'react-native';
+import { Alert } from 'react-native'
 
-const url = 'http://10.0.2.2:3333/api/1.0.0/user/';
+const url = 'http://10.0.2.2:3333/api/1.0.0/user/'
 
 export default class UserController {
-  //returns user
+  // returns user
 
-  async GetUserAsync(id, userToken) {
+  async GetUserAsync (id, userToken) {
     try {
-      console.log('Sending GET request TO ' + url + id);
-      let response = await fetch(url + id, {
+      console.log('Sending GET request TO ' + url + id)
+      const response = await fetch(url + id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'X-Authorization': userToken,
-        },
-      });
+          'X-Authorization': userToken
+        }
+      })
 
       if (response.ok) {
-        let user = await response.json();
-        return user;
+        const user = await response.json()
+        return user
       } else {
-        console.log(response.status);
+        console.log(response.status)
       }
     } catch (e) {
-      throw new Error(e);
+      throw new Error(e)
     }
   }
 
-  //returns boolean
-  async PatchUserAsync(id, userToken, user) {
+  // returns boolean
+  async PatchUserAsync (id, userToken, user) {
     try {
       console.log(
         'Sending PATCH request ' +
@@ -37,99 +37,99 @@ export default class UserController {
           url +
           id +
           ' with AUTH:' +
-          userToken,
-      );
-      let response = await fetch(url + id, {
+          userToken
+      )
+      const response = await fetch(url + id, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'X-Authorization': userToken,
+          'X-Authorization': userToken
         },
-        body: user,
-      });
+        body: user
+      })
 
       if (response.ok) {
-        return true;
+        return true
       } else {
-        console.log(response.status);
+        console.log(response.status)
       }
     } catch (e) {
-      console.error(e);
-      Alert.alert('There seemed to be an error: ' + e);
+      console.error(e)
+      Alert.alert('There seemed to be an error: ' + e)
     }
   }
 
-  //returns boolean
-  async RegisterUserAsync(user) {
+  // returns boolean
+  async RegisterUserAsync (user) {
     try {
-      console.log('Sending POST Request ' + user + ' TO ' + url);
-      let response = await fetch(url, {
+      console.log('Sending POST Request ' + user + ' TO ' + url)
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: user,
-      });
+        body: user
+      })
 
       if (response.ok) {
-        let json = await response.json();
+        const json = await response.json()
 
-        console.log('json: ' + JSON.stringify(json));
+        console.log('json: ' + JSON.stringify(json))
 
-        return true;
+        return true
       } else {
-        throw new Error(response.status);
+        throw new Error(response.status)
       }
     } catch (e) {
-      throw new Error(e);
+      throw new Error(e)
     }
   }
 
-  async LogInUserAsync(user) {
+  async LogInUserAsync (user) {
     try {
-      console.log('Sending POST Request TO ' + url + 'login');
-      let response = await fetch(url + 'login', {
+      console.log('Sending POST Request TO ' + url + 'login')
+      const response = await fetch(url + 'login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: user,
-      });
+        body: user
+      })
 
-      console.log(response.status);
+      console.log(response.status)
       if (response.ok) {
-        let user = await response.json();
+        const user = await response.json()
 
-        console.log('user: ' + JSON.stringify(user));
+        console.log('user: ' + JSON.stringify(user))
 
-        return user;
+        return user
       } else {
-        return null;
+        return null
       }
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
   }
 
-  async LogOutUserAsync(userToken) {
+  async LogOutUserAsync (userToken) {
     try {
-      let response = await fetch(url + 'logout', {
+      const response = await fetch(url + 'logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Authorization': userToken,
-        },
-      });
+          'X-Authorization': userToken
+        }
+      })
 
       if (response.ok) {
-        console.log('Logged Out');
-        return true;
+        console.log('Logged Out')
+        return true
       } else {
-        console.log(response.status);
-        return false;
+        console.log(response.status)
+        return false
       }
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
   }
 }

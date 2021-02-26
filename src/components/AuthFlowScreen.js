@@ -1,26 +1,25 @@
 
+import { createStackNavigator } from '@react-navigation/stack'
+import React, { Component } from 'react'
 
-import {createStackNavigator} from '@react-navigation/stack';
-import React, {Component} from 'react';
+import LogInView from './views/logIn_view'
+import RegisterView from './views/register_view'
 
-import LogInView from './views/logIn_view';
-import RegisterView from './views/register_view';
-
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
 
 export default class AuthFlowScreen extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
-    this.state = {};
+    this.state = {}
   }
 
-  render() {
+  render () {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="LogIn" component={LogInView} />
-        <Stack.Screen name="Register" component={RegisterView} />
+        <Stack.Screen name='LogIn' component={LogInView} />
+        <Stack.Screen name='Register' component={RegisterView} />
       </Stack.Navigator>
-    );
+    )
   }
 }

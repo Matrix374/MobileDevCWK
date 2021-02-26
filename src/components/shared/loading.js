@@ -1,18 +1,18 @@
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import React, { Component } from 'react'
+import { View, Text } from 'react-native'
 
 export default class Loading extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
-    this.state = {};
+    this.state = {}
   }
 
-  render() {
+  render () {
     return (
       <View>
-          <Text>Loading...</Text>
+        <Text>Loading...</Text>
       </View>
-    );
+    )
   }
 }

@@ -1,27 +1,27 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react'
 
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import HomeScreen from './HomeScreen';
-import UserScreen from './UserScreen';
+import HomeScreen from './HomeScreen'
+import UserScreen from './UserScreen'
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator()
 
 export default class MainScreen extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
-      id: '',
-    };
+      id: ''
+    }
   }
 
-  render() {
+  render () {
     return (
       <Tab.Navigator>
-        <Tab.Screen name="HomeScreen" component={HomeScreen} />
-        <Tab.Screen name="UserScreen" component={UserScreen} />
+        <Tab.Screen name='HomeScreen' component={HomeScreen} />
+        <Tab.Screen name='UserScreen' component={UserScreen} />
       </Tab.Navigator>
-    );
+    )
   }
 }
