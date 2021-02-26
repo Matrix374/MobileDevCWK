@@ -47,14 +47,13 @@ export const Styles = StyleSheet.create({
   },
   preview: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     alignItems: 'center'
   },
   image: {
-    resizeMode: 'contain',
-    height: 50,
-    width: 50,
-    alignSelf: 'flex-end'
+    height: 100,
+    width: 100,
+    alignSelf: 'flex-start'
   },
   error: {
     fontSize: 16,

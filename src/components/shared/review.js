@@ -55,6 +55,9 @@ export default class Review extends Component {
         console.log('Photo Exists');
         this.setState({hasPhoto: true});
       }
+      else {
+        console.log('No Photos? ' + response.status + ':' + response.statusText)
+      }
     } catch (e) {
       console.error(e);
     }
@@ -226,7 +229,7 @@ export default class Review extends Component {
     let PhotoComponent = (
       <View>
         <Image
-          style={Styles.image_thumb}
+          style={Styles.image}
           source={{
             uri:
               'http://10.0.2.2:3333/api/1.0.0/location/' +
