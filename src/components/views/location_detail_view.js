@@ -34,6 +34,26 @@ export default class LocationDetail extends Component {
     });
   };
 
+  getLocation = async () => {
+    let userToken = await _storageService.retrieveToken();
+    let location_id = this.props.route.params?.location_id;
+    let favourite = this.props.route.params?.favourite;
+    
+    await this.setState({
+      location_id: location_id,
+      favourite: favourite,
+      userToken: userToken,
+    });
+    
+    console.log('Location Id: ' + this.state.location_id);
+    console.log('Favourite: ' + this.state.favourite);
+    console.log('LocationDetail: ' + this.state.userToken);
+
+    this.getData();
+    this.getReviews();
+    this.getLikes();
+  };
+
   getData = async () => {
     try {
       let json = await _locationController.getLocationData(
@@ -111,24 +131,10 @@ export default class LocationDetail extends Component {
   };
 
   async componentDidMount() {
-    let location_id = this.props.route.params?.location_id;
-    let favourite = this.props.route.params?.favourite;
-    await this.setState({location_id: location_id, favourite: favourite});
-    console.log('Location Id: ' + this.state.location_id);
-    console.log('Favourite: ' + this.state.favourite);
-
-    let userToken = await _storageService.retrieveToken();
-    await this.setState({userToken: userToken});
-    console.log('LocationDetail: ' + this.state.userToken);
-
-    this.getData();
-    this.getReviews();
-    this.getLikes();
+    this.getLocation();
 
     this._unsubscribe = this.props.navigation.addListener('focus', async () => {
-      this.getData();
-      this.getReviews();
-      this.getLikes();
+      this.getLocation();
     });
   }
 
